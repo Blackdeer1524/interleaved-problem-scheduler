@@ -178,6 +178,18 @@ body {
   transition: border-color 0.12s, color 0.12s, background 0.12s;
 }
 .unsolve-btn:hover { border-color: #fca5a5; color: #dc2626; background: #fef2f2; }
+.hint-row { margin-bottom: 20px; }
+.hint-btn {
+  background: none;
+  border: none;
+  font-size: 12px;
+  color: #9ca3af;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline dotted;
+}
+.hint-btn:hover { color: #6b7280; }
+.hint-path { margin-top: 6px; font-size: 12px; color: #6b7280; font-family: monospace; }
 </style>
 </head>
 <body>
@@ -203,6 +215,10 @@ body {
       <hr class="divider">
       <div class="problem-area" id="problem-area">
         <div class="status">Loading problems…</div>
+      </div>
+      <div class="hint-row" id="hint-row" style="display:none">
+        <button class="hint-btn" onclick="showHint()">Show hint</button>
+        <div class="hint-path" id="hint-path"></div>
       </div>
       <div class="actions" id="actions" style="display:none">
         <button class="btn btn-primary" onclick="markSolved()">Mark Solved ✓</button>
@@ -499,11 +515,24 @@ function parseWithMath(src) {
   return html.replace(/\x02MATH(\d+)\x03/g, (_, i) => stash[+i]);
 }
 
+function showHint() {
+  const { topic } = deck[deckIdx];
+  const btn = document.querySelector('#hint-row .hint-btn');
+  const path = document.getElementById('hint-path');
+  path.textContent = topic.id;
+  btn.style.display = 'none';
+}
+
 function renderCurrent() {
   const { topic, problem } = deck[deckIdx];
   document.getElementById('progress').textContent = `${totalUnsolved()} remaining`;
   renderFolderBar();
   document.getElementById('actions').style.display = 'flex';
+  // Reset hint
+  const hintRow = document.getElementById('hint-row');
+  hintRow.style.display = 'block';
+  hintRow.querySelector('.hint-btn').style.display = '';
+  document.getElementById('hint-path').textContent = '';
 
   const area = document.getElementById('problem-area');
   if (problem.url) {
