@@ -1,0 +1,9 @@
+1. https://codeforces.com/edu/course/2/lesson/6/2/practice/contest/283932/problem/E
+2. https://codeforces.com/edu/course/2/lesson/6/2/practice/contest/283932/problem/F
+3. https://codeforces.com/edu/course/2/lesson/6/2/practice/contest/283932/problem/G
+4. https://codeforces.com/edu/course/2/lesson/6/2/practice/contest/283932/problem/H
+5. https://codeforces.com/edu/course/2/lesson/6/3/practice/contest/285083/problem/A
+6. https://codeforces.com/edu/course/2/lesson/6/4/practice/contest/285069/problem/A
+7. https://codeforces.com/edu/course/2/lesson/6/4/practice/contest/285069/problem/C
+8. https://codeforces.com/edu/course/2/lesson/6/5/practice/contest/285084/problem/B
+9. https://codeforces.com/edu/course/2/lesson/6/5/practice/contest/285084/problem/C

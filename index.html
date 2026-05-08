@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Problems</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea'] }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/marked@9/marked.min.js"></script>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  height: 100vh;
+  background: #f5f5f5;
+  font-family: system-ui, sans-serif;
+  display: flex;
+  overflow: hidden;
+}
+.app {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  background: white;
+}
+.sidebar {
+  width: 260px;
+  flex-shrink: 0;
+  border-right: 1px solid #e5e7eb;
+  overflow-y: auto;
+  padding: 14px 8px 14px 12px;
+  background: #fafafa;
+}
+.main {
+  flex: 1;
+  min-width: 0;
+  overflow-y: auto;
+  padding: 28px 32px 40px;
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.progress { color: #6b7280; font-size: 14px; }
+.timer-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 14px;
+  color: #6b7280;
+}
+.timer-row input[type=number] {
+  width: 42px;
+  padding: 3px 4px;
+  border: 1px solid #d1d5db;
+  border-radius: 5px;
+  font-size: 14px;
+  text-align: center;
+  -moz-appearance: textfield;
+}
+.timer-row input[type=number]::-webkit-inner-spin-button,
+.timer-row input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; appearance: none; }
+#timer-display {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  color: #374151;
+  min-width: 46px;
+  text-align: right;
+}
+#timer-display.expired { color: #dc2626; }
+#overtime-label { color: #dc2626; font-size: 13px; }
+/* .sidebar replaces .folder-bar */
+.folder-tree, .folder-subtree { list-style: none; }
+.folder-subtree { padding-left: 20px; margin-top: 2px; }
+.folder-node { margin: 2px 0; }
+.folder-row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 3px 6px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 13px;
+  color: #374151;
+  user-select: none;
+}
+.folder-row:hover { background: #f3f4f6; }
+.folder-row input[type=checkbox] { cursor: pointer; accent-color: #2563eb; margin: 0; }
+.folder-count { color: #9ca3af; font-weight: 500; margin-left: auto; padding-left: 8px; }
+.divider { border: none; border-top: 1px solid #f3f4f6; margin: 0 0 24px; }
+.problem-area { min-height: 80px; margin-bottom: 28px; }
+.link-problem { text-align: center; padding: 16px 0; }
+.open-btn {
+  display: inline-block;
+  background: #2563eb;
+  color: white;
+  text-decoration: none;
+  padding: 15px 32px;
+  border-radius: 8px;
+  font-size: 17px;
+  font-weight: 600;
+  transition: background 0.15s;
+}
+.open-btn:hover { background: #1d4ed8; }
+.problem-text { font-size: 15px; line-height: 1.75; color: #1f2937; }
+.problem-text p { margin-bottom: 10px; }
+.problem-text ol, .problem-text ul { padding-left: 22px; margin-bottom: 10px; }
+.problem-text li { margin-bottom: 4px; }
+.actions { display: flex; gap: 10px; }
+.btn {
+  flex: 1;
+  padding: 11px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: background 0.15s;
+}
+.btn-primary { background: #16a34a; color: white; }
+.btn-primary:hover { background: #15803d; }
+.btn-secondary { background: white; color: #374151; border: 1px solid #d1d5db; }
+.btn-secondary:hover { background: #f9fafb; }
+.status { color: #9ca3af; text-align: center; padding: 40px 0; font-size: 15px; }
+.done-area { text-align: center; padding: 16px 0 24px; }
+.done-area p { color: #374151; margin-bottom: 20px; }
+.nav-tabs { display: flex; gap: 0; margin-bottom: 24px; border-bottom: 1px solid #e5e7eb; }
+.nav-tab {
+  padding: 8px 18px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #6b7280;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  cursor: pointer;
+}
+.nav-tab:hover { color: #374151; }
+.nav-tab.active { color: #2563eb; border-bottom-color: #2563eb; }
+.solved-section { margin-bottom: 24px; }
+.solved-topic-name {
+  font-size: 11px;
+  font-weight: 600;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 6px;
+  padding: 0 2px;
+}
+.solved-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 2px;
+  border-bottom: 1px solid #f3f4f6;
+  font-size: 13px;
+}
+.solved-num { color: #d1d5db; min-width: 24px; }
+.solved-link { flex: 1; color: #2563eb; text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.solved-link:hover { text-decoration: underline; }
+.solved-preview { flex: 1; color: #374151; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.unsolve-btn {
+  flex-shrink: 0;
+  padding: 3px 9px;
+  font-size: 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 5px;
+  background: white;
+  color: #9ca3af;
+  cursor: pointer;
+  transition: border-color 0.12s, color 0.12s, background 0.12s;
+}
+.unsolve-btn:hover { border-color: #fca5a5; color: #dc2626; background: #fef2f2; }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar" id="folder-bar"></aside>
+  <div class="main">
+    <div class="nav-tabs">
+      <button class="nav-tab active" onclick="switchView('train')">Train</button>
+      <button class="nav-tab" onclick="switchView('solved')">Solved (<span id="solved-count">0</span>)</button>
+    </div>
+    <div id="train-view">
+      <div class="header">
+        <div class="progress" id="progress">Loading…</div>
+        <div class="timer-row">
+          <span>⏱</span>
+          <input type="number" id="timer-min" min="0" max="99" value="0" title="minutes">
+          <span>:</span>
+          <input type="number" id="timer-sec" min="0" max="59" value="0" title="seconds">
+          <span id="timer-display"></span>
+          <span id="overtime-label"></span>
+        </div>
+      </div>
+      <hr class="divider">
+      <div class="problem-area" id="problem-area">
+        <div class="status">Loading problems…</div>
+      </div>
+      <div class="actions" id="actions" style="display:none">
+        <button class="btn btn-primary" onclick="markSolved()">Mark Solved ✓</button>
+        <button class="btn btn-secondary" onclick="skip()">Skip →</button>
+      </div>
+    </div>
+    <div id="solved-view" style="display:none"></div>
+  </div>
+</div>
+
+<script>
+let topics = [];
+let solved = {};
+let selectedTopics = new Set();
+let folderTree = null;
+let deck = [];
+let deckIdx = 0;
+let timerHandle = null;
+let timerRemaining = 0;
+let currentView = 'train';
+
+// ── Folder tree ───────────────────────────────────────────────────────────────
+
+function buildTree(topicIds) {
+  const root = { path: null, topicId: null, isLeaf: false, children: {} };
+  for (const id of topicIds) {
+    let node = root;
+    const parts = id.split('/');
+    for (let i = 0; i < parts.length; i++) {
+      const key = parts[i];
+      if (!node.children[key]) {
+        node.children[key] = {
+          name: key,
+          path: parts.slice(0, i + 1).join('/'),
+          topicId: null,
+          isLeaf: false,
+          children: {},
+        };
+      }
+      node = node.children[key];
+    }
+    node.isLeaf = true;
+    node.topicId = id;
+  }
+  return root;
+}
+
+function getLeaves(node) {
+  if (node.isLeaf) return [node.topicId];
+  return Object.values(node.children).flatMap(getLeaves);
+}
+
+function findNode(root, path) {
+  let node = root;
+  for (const part of path.split('/')) {
+    node = node.children[part];
+    if (!node) return null;
+  }
+  return node;
+}
+
+function unsolvedInTopic(topicId) {
+  const t = topics.find(x => x.id === topicId);
+  if (!t) return 0;
+  const s = solved[topicId] || new Set();
+  return t.problems.filter(p => !s.has(p.index)).length;
+}
+
+function renderTreeHtml(node) {
+  return Object.values(node.children)
+    .sort((a, b) => a.name.localeCompare(b.name))
+    .map(child => {
+      const leaves = getLeaves(child);
+      const selCount = leaves.filter(l => selectedTopics.has(l)).length;
+      const checked = selCount === leaves.length;
+      const indet = selCount > 0 && selCount < leaves.length;
+      const rem = leaves.reduce((n, id) => n + unsolvedInTopic(id), 0);
+      const subtree = !child.isLeaf
+        ? `<ul class="folder-subtree">${renderTreeHtml(child)}</ul>` : '';
+      const p = escHtml(child.path);
+      return `<li class="folder-node">
+  <div class="folder-row" onclick="toggleNode('${p}')">
+    <input type="checkbox" ${checked ? 'checked' : ''} data-indet="${indet}"
+           onclick="event.stopPropagation();toggleNode('${p}')">
+    <span>${escHtml(child.name)}</span>
+    <b class="folder-count">${rem}</b>
+  </div>${subtree}</li>`;
+    }).join('');
+}
+
+// ── Persistence ───────────────────────────────────────────────────────────────
+
+function loadSolved() {
+  try {
+    const raw = localStorage.getItem('algo_shad_solved');
+    if (raw) {
+      for (const [k, v] of Object.entries(JSON.parse(raw)))
+        solved[k] = new Set(v);
+    }
+  } catch {}
+}
+
+function saveSolved() {
+  const out = {};
+  for (const [k, v] of Object.entries(solved)) out[k] = [...v];
+  localStorage.setItem('algo_shad_solved', JSON.stringify(out));
+}
+
+function loadTimerPrefs() {
+  try {
+    const t = JSON.parse(localStorage.getItem('algo_shad_timer') || '{}');
+    document.getElementById('timer-min').value = t.min ?? 0;
+    document.getElementById('timer-sec').value = t.sec ?? 0;
+  } catch {}
+}
+
+function saveTimerPrefs() {
+  localStorage.setItem('algo_shad_timer', JSON.stringify({
+    min: +document.getElementById('timer-min').value || 0,
+    sec: +document.getElementById('timer-sec').value || 0,
+  }));
+}
+
+document.getElementById('timer-min').addEventListener('change', saveTimerPrefs);
+document.getElementById('timer-sec').addEventListener('change', saveTimerPrefs);
+
+function loadTopicPrefs(allTopicIds) {
+  try {
+    const saved = JSON.parse(localStorage.getItem('algo_shad_topics') || 'null');
+    selectedTopics = new Set(saved ? saved.filter(id => allTopicIds.includes(id)) : allTopicIds);
+  } catch {
+    selectedTopics = new Set(allTopicIds);
+  }
+  if (selectedTopics.size === 0) selectedTopics = new Set(allTopicIds);
+}
+
+function saveTopicPrefs() {
+  localStorage.setItem('algo_shad_topics', JSON.stringify([...selectedTopics]));
+}
+
+function renderFolderBar() {
+  const bar = document.getElementById('folder-bar');
+  bar.innerHTML = `<ul class="folder-tree">${renderTreeHtml(folderTree)}</ul>`;
+  bar.querySelectorAll('input[data-indet="true"]').forEach(cb => { cb.indeterminate = true; });
+}
+
+function toggleNode(path) {
+  const node = findNode(folderTree, path);
+  if (!node) return;
+  const leaves = getLeaves(node);
+  const allSel = leaves.every(l => selectedTopics.has(l));
+  if (allSel) {
+    leaves.forEach(l => selectedTopics.delete(l));
+    if (selectedTopics.size === 0) leaves.forEach(l => selectedTopics.add(l));
+  } else {
+    leaves.forEach(l => selectedTopics.add(l));
+  }
+  saveTopicPrefs();
+  renderFolderBar();
+  deck = [];
+  deckIdx = 0;
+  clearInterval(timerHandle);
+  advance();
+}
+
+// ── Scheduler ─────────────────────────────────────────────────────────────────
+
+function firstUnsolved(topic) {
+  const s = solved[topic.id] || new Set();
+  return topic.problems.find(p => !s.has(p.index)) ?? null;
+}
+
+function activeTopics() {
+  return topics.filter(t => selectedTopics.has(t.id));
+}
+
+function totalUnsolved() {
+  return activeTopics().reduce((n, t) => {
+    const s = solved[t.id] || new Set();
+    return n + t.problems.filter(p => !s.has(p.index)).length;
+  }, 0);
+}
+
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+}
+
+function buildRound(prevLastTopicId) {
+  const available = activeTopics()
+    .map(t => ({ topic: t, problem: firstUnsolved(t) }))
+    .filter(x => x.problem !== null);
+
+  if (available.length === 0) return [];
+
+  shuffle(available);
+
+  // Ensure first item of new round doesn't repeat last item of previous round
+  if (prevLastTopicId && available[0].topic.id === prevLastTopicId) {
+    const swap = available.findIndex((x, i) => i > 0 && x.topic.id !== prevLastTopicId);
+    if (swap > 0) [available[0], available[swap]] = [available[swap], available[0]];
+  }
+
+  // Fix any within-round consecutive duplicates
+  // (only relevant when a single topic has multiple problems and all others are exhausted)
+  for (let i = 1; i < available.length; i++) {
+    if (available[i].topic.id === available[i - 1].topic.id) {
+      const swap = available.findIndex((x, j) => j > i && x.topic.id !== available[i - 1].topic.id);
+      if (swap > 0) [available[i], available[swap]] = [available[swap], available[i]];
+    }
+  }
+
+  return available;
+}
+
+function advance() {
+  if (deckIdx >= deck.length) {
+    const prevLastId = deck.length > 0 ? deck[deck.length - 1].topic.id : null;
+    deck = buildRound(prevLastId);
+    deckIdx = 0;
+    if (deck.length === 0) { renderDone(); return; }
+  }
+  renderCurrent();
+}
+
+// ── Timer ─────────────────────────────────────────────────────────────────────
+
+function startTimer() {
+  clearInterval(timerHandle);
+  document.getElementById('overtime-label').textContent = '';
+  document.getElementById('timer-display').classList.remove('expired');
+
+  const min = +document.getElementById('timer-min').value || 0;
+  const sec = +document.getElementById('timer-sec').value || 0;
+  timerRemaining = min * 60 + sec;
+
+  if (timerRemaining <= 0) {
+    document.getElementById('timer-display').textContent = '';
+    return;
+  }
+
+  renderTimerDisplay();
+  timerHandle = setInterval(() => {
+    timerRemaining--;
+    renderTimerDisplay();
+    if (timerRemaining <= 0) {
+      clearInterval(timerHandle);
+      document.getElementById('timer-display').classList.add('expired');
+      document.getElementById('overtime-label').textContent = '⏰ Time\'s up';
+      beep();
+    }
+  }, 1000);
+}
+
+function renderTimerDisplay() {
+  const m = Math.floor(timerRemaining / 60);
+  const s = timerRemaining % 60;
+  document.getElementById('timer-display').textContent =
+    `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+}
+
+function beep() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.type = 'sine';
+    osc.frequency.value = 880;
+    gain.gain.setValueAtTime(0.3, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.8);
+    osc.start();
+    osc.stop(ctx.currentTime + 0.8);
+  } catch {}
+}
+
+// ── Render ────────────────────────────────────────────────────────────────────
+
+function escHtml(s) {
+  return s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+// Protect math spans from marked.js by swapping them out before parsing and back after.
+function parseWithMath(src) {
+  const stash = [];
+  const placeholder = (m) => { stash.push(m); return `\x02MATH${stash.length - 1}\x03`; };
+  const guarded = src
+    .replace(/\\\[[\s\S]*?\\\]/g, placeholder)   // display math \[...\]
+    .replace(/\\\([\s\S]*?\\\)/g, placeholder);   // inline math \(...\)
+  const html = marked.parse(guarded);
+  return html.replace(/\x02MATH(\d+)\x03/g, (_, i) => stash[+i]);
+}
+
+function renderCurrent() {
+  const { topic, problem } = deck[deckIdx];
+  document.getElementById('progress').textContent = `${totalUnsolved()} remaining`;
+  renderFolderBar();
+  document.getElementById('actions').style.display = 'flex';
+
+  const area = document.getElementById('problem-area');
+  if (problem.url) {
+    area.innerHTML = `<div class="link-problem"><a class="open-btn" href="${escHtml(problem.url)}" target="_blank" rel="noopener">Open Problem →</a></div>`;
+  } else {
+    area.innerHTML = `<div class="problem-text">${parseWithMath(problem.content)}</div>`;
+    if (window.MathJax) MathJax.typesetPromise([area]);
+  }
+
+  startTimer();
+}
+
+function renderDone() {
+  clearInterval(timerHandle);
+  document.getElementById('progress').textContent = '0 remaining';
+  document.getElementById('actions').style.display = 'none';
+  document.getElementById('problem-area').innerHTML = `
+    <div class="done-area">
+      <p>You've worked through all available problems!</p>
+      <button class="btn btn-secondary" style="width:auto;padding:11px 28px" onclick="newSession()">New Session ↺</button>
+    </div>`;
+}
+
+// ── Solved view ───────────────────────────────────────────────────────────────
+
+function totalSolvedCount() {
+  return Object.values(solved).reduce((n, s) => n + s.size, 0);
+}
+
+function updateSolvedCount() {
+  document.getElementById('solved-count').textContent = totalSolvedCount();
+}
+
+function switchView(v) {
+  currentView = v;
+  document.getElementById('train-view').style.display = v === 'train' ? '' : 'none';
+  document.getElementById('solved-view').style.display = v === 'solved' ? '' : 'none';
+  document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
+  document.querySelectorAll('.nav-tab')[v === 'train' ? 0 : 1].classList.add('active');
+  if (v === 'solved') renderSolvedView();
+}
+
+function renderSolvedView() {
+  const el = document.getElementById('solved-view');
+  const sections = topics
+    .map(t => ({ topic: t, problems: t.problems.filter(p => (solved[t.id] || new Set()).has(p.index)) }))
+    .filter(s => s.problems.length > 0);
+
+  if (sections.length === 0) {
+    el.innerHTML = '<div class="status">No solved problems yet.</div>';
+    return;
+  }
+
+  el.innerHTML = sections.map(({ topic, problems }) => `
+    <div class="solved-section">
+      <div class="solved-topic-name">${escHtml(topic.id)}</div>
+      ${problems.map(p => {
+        const preview = p.url
+          ? `<a class="solved-link" href="${escHtml(p.url)}" target="_blank" rel="noopener">${escHtml(p.url.replace(/^https?:\/\//, ''))}</a>`
+          : `<span class="solved-preview">${escHtml(p.content.replace(/\n/g, ' ').substring(0, 90))}…</span>`;
+        return `<div class="solved-item">
+          <span class="solved-num">#${p.index + 1}</span>
+          ${preview}
+          <button class="unsolve-btn" onclick="unsolve('${escHtml(topic.id)}',${p.index})">Unsolve</button>
+        </div>`;
+      }).join('')}
+    </div>`).join('');
+}
+
+function unsolve(topicId, idx) {
+  if (solved[topicId]) {
+    solved[topicId].delete(idx);
+    if (solved[topicId].size === 0) delete solved[topicId];
+  }
+  saveSolved();
+  updateSolvedCount();
+  renderSolvedView();
+  renderFolderBar();
+}
+
+// ── Actions ───────────────────────────────────────────────────────────────────
+
+function markSolved() {
+  const { topic, problem } = deck[deckIdx];
+  if (!solved[topic.id]) solved[topic.id] = new Set();
+  solved[topic.id].add(problem.index);
+  saveSolved();
+  updateSolvedCount();
+  clearInterval(timerHandle);
+  deckIdx++;
+  advance();
+}
+
+function skip() {
+  clearInterval(timerHandle);
+  deckIdx++;
+  advance();
+}
+
+function newSession() {
+  deck = [];
+  deckIdx = 0;
+  advance();
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+
+async function init() {
+  loadSolved();
+  loadTimerPrefs();
+  try {
+    const res = await fetch('/api/problems');
+    if (!res.ok) throw new Error(res.status);
+    topics = (await res.json()).topics;
+  } catch {
+    document.getElementById('problem-area').innerHTML =
+      '<div class="status">Could not load problems — is <code>server.py</code> running?</div>';
+    return;
+  }
+  const allTopicIds = topics.map(t => t.id).sort();
+  folderTree = buildTree(allTopicIds);
+  loadTopicPrefs(allTopicIds);
+  updateSolvedCount();
+  renderFolderBar();
+  advance();
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>

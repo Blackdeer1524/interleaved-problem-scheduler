@@ -1,0 +1,10 @@
+1. https://leetcode.com/problems/sum-of-all-odd-length-subarrays/
+2. https://leetcode.com/problems/find-the-pivot-integer/
+3. https://leetcode.com/problems/longest-subsequence-with-limited-sum/
+4. https://leetcode.com/problems/minimum-value-to-get-positive-step-by-step-sum/
+5. https://leetcode.com/problems/xor-queries-of-a-subarray/
+6. https://leetcode.com/problems/maximum-or/
+7. https://leetcode.com/problems/shifting-letters-ii/
+8. https://leetcode.com/problems/longest-well-performing-interval/
+9. https://leetcode.com/problems/make-sum-divisible-by-p/
+10. https://leetcode.com/problems/shortest-subarray-with-sum-at-least-k/
