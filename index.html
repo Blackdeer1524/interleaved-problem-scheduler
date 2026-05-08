@@ -35,9 +35,16 @@ body {
   flex-shrink: 0;
   border-right: 1px solid #e5e7eb;
   overflow-y: auto;
+  overflow-x: hidden;
   padding: 14px 8px 14px 12px;
   background: #fafafa;
+  transition: width 0.2s ease, padding 0.2s ease, border-color 0.2s ease;
 }
+.app.collapsed .sidebar {
+  width: 32px;
+  padding: 8px 4px;
+}
+.app.collapsed #folder-bar { display: none; }
 .main {
   flex: 1;
   min-width: 0;
@@ -193,11 +200,43 @@ body {
 }
 .hint-btn:hover { color: #6b7280; }
 .hint-path { margin-top: 6px; font-size: 12px; color: #6b7280; font-family: monospace; }
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 6px;
+}
+.hamburger {
+  background: none;
+  border: none;
+  font-size: 18px;
+  line-height: 1;
+  padding: 2px 6px 2px 2px;
+  color: #9ca3af;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.hamburger:hover { color: #374151; }
+.folder-arrow {
+  font-size: 9px;
+  color: #9ca3af;
+  width: 14px;
+  text-align: center;
+  flex-shrink: 0;
+  cursor: pointer;
+  user-select: none;
+}
+.folder-arrow:hover { color: #374151; }
+.folder-arrow-spacer { width: 14px; flex-shrink: 0; }
 </style>
 </head>
 <body>
 <div class="app">
-  <aside class="sidebar" id="folder-bar"></aside>
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <button class="hamburger" onclick="toggleSidebar()">☰</button>
+    </div>
+    <div id="folder-bar"></div>
+  </aside>
   <div class="main">
     <div class="nav-tabs">
       <button class="nav-tab active" onclick="switchView('train')">Train</button>
@@ -236,6 +275,7 @@ body {
 let topics = [];
 let solved = {};
 let selectedTopics = new Set();
+let collapsedNodes = new Set();
 let folderTree = null;
 let deck = [];
 let deckIdx = 0;
@@ -299,17 +339,39 @@ function renderTreeHtml(node) {
       const checked = selCount === leaves.length;
       const indet = selCount > 0 && selCount < leaves.length;
       const rem = leaves.reduce((n, id) => n + unsolvedInTopic(id), 0);
-      const subtree = !child.isLeaf
-        ? `<ul class="folder-subtree">${renderTreeHtml(child)}</ul>` : '';
       const p = escHtml(child.path);
+      const isCollapsed = !child.isLeaf && collapsedNodes.has(child.path);
+      const arrow = child.isLeaf
+        ? `<span class="folder-arrow-spacer"></span>`
+        : `<span class="folder-arrow" onclick="event.stopPropagation();toggleCollapse('${p}')">${isCollapsed ? '▶' : '▼'}</span>`;
+      const subtree = (!child.isLeaf && !isCollapsed)
+        ? `<ul class="folder-subtree">${renderTreeHtml(child)}</ul>` : '';
       return `<li class="folder-node">
   <div class="folder-row" onclick="toggleNode('${p}')">
-    <input type="checkbox" ${checked ? 'checked' : ''} data-indet="${indet}"
+    ${arrow}<input type="checkbox" ${checked ? 'checked' : ''} data-indet="${indet}"
            onclick="event.stopPropagation();toggleNode('${p}')">
     <span>${escHtml(child.name)}</span>
     <b class="folder-count">${rem}</b>
   </div>${subtree}</li>`;
     }).join('');
+}
+
+function toggleCollapse(path) {
+  if (collapsedNodes.has(path)) collapsedNodes.delete(path);
+  else collapsedNodes.add(path);
+  saveCollapsed();
+  renderFolderBar();
+}
+
+function saveCollapsed() {
+  localStorage.setItem('algo_shad_collapsed', JSON.stringify([...collapsedNodes]));
+}
+
+function loadCollapsed() {
+  try {
+    const saved = JSON.parse(localStorage.getItem('algo_shad_collapsed') || '[]');
+    collapsedNodes = new Set(saved);
+  } catch { collapsedNodes = new Set(); }
 }
 
 // ── Persistence ───────────────────────────────────────────────────────────────
@@ -586,6 +648,10 @@ function renderDone() {
     </div>`;
 }
 
+function toggleSidebar() {
+  document.querySelector('.app').classList.toggle('collapsed');
+}
+
 // ── Solved view ───────────────────────────────────────────────────────────────
 
 function totalSolvedCount() {
@@ -688,6 +754,7 @@ function newSession() {
 
 async function init() {
   await loadSolved();
+  loadCollapsed();
   loadTimerPrefs();
   if (window.__TOPICS__) {
     topics = window.__TOPICS__;
