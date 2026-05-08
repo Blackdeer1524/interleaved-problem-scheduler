@@ -51,8 +51,11 @@ class Handler(BaseHTTPRequestHandler):
             length = int(self.headers.get('Content-Length', 0))
             body = self.rfile.read(length)
             try:
-                json.loads(body)  # validate JSON before writing
-                SOLVED_FILE.write_bytes(body)
+                incoming = json.loads(body)
+                existing = json.loads(SOLVED_FILE.read_text(encoding='utf-8')) if SOLVED_FILE.exists() else {}
+                for tid, indices in incoming.items():
+                    existing[tid] = list(set(existing.get(tid, [])) | set(indices))
+                SOLVED_FILE.write_text(json.dumps(existing, ensure_ascii=False), encoding='utf-8')
                 self.send_response(204)
             except Exception:
                 self.send_response(400)
