@@ -8,6 +8,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).parent
 PROBLEMS_DIR = ROOT / 'problems'
+SOLVED_FILE = ROOT / 'solved.json'
 
 
 def parse_md(path: Path) -> list[dict]:
@@ -45,7 +46,31 @@ class Handler(BaseHTTPRequestHandler):
     def log_message(self, fmt, *args):
         pass  # silence access logs
 
+    def do_POST(self):
+        if self.path == '/api/solved':
+            length = int(self.headers.get('Content-Length', 0))
+            body = self.rfile.read(length)
+            try:
+                json.loads(body)  # validate JSON before writing
+                SOLVED_FILE.write_bytes(body)
+                self.send_response(204)
+            except Exception:
+                self.send_response(400)
+            self.end_headers()
+            return
+        self.send_response(404)
+        self.end_headers()
+
     def do_GET(self):
+        if self.path == '/api/solved':
+            data = SOLVED_FILE.read_bytes() if SOLVED_FILE.exists() else b'{}'
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json; charset=utf-8')
+            self.send_header('Content-Length', len(data))
+            self.end_headers()
+            self.wfile.write(data)
+            return
+
         if self.path == '/api/problems':
             data = json.dumps({'topics': build_topics()}, ensure_ascii=False).encode('utf-8')
             self.send_response(200)

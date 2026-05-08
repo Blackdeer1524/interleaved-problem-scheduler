@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Problems">
+<meta name="theme-color" content="#2563eb">
 <title>Problems</title>
 <script>
 MathJax = {
@@ -311,20 +314,47 @@ function renderTreeHtml(node) {
 
 // ── Persistence ───────────────────────────────────────────────────────────────
 
-function loadSolved() {
-  try {
-    const raw = localStorage.getItem('algo_shad_solved');
-    if (raw) {
-      for (const [k, v] of Object.entries(JSON.parse(raw)))
+async function loadSolved() {
+  if (window.__TOPICS__) {
+    // Static dist.html mode: localStorage is the live store; __SOLVED__ is only a first-run seed
+    try {
+      const raw = localStorage.getItem('algo_shad_solved');
+      if (raw) {
+        for (const [k, v] of Object.entries(JSON.parse(raw)))
+          solved[k] = new Set(v);
+        return;
+      }
+    } catch {}
+    if (window.__SOLVED__) {
+      for (const [k, v] of Object.entries(window.__SOLVED__))
         solved[k] = new Set(v);
     }
+    return;
+  }
+  // Server mode: /api/solved is authoritative, localStorage is a fallback
+  try {
+    const res = await fetch('/api/solved');
+    if (res.ok) {
+      for (const [k, v] of Object.entries(await res.json()))
+        solved[k] = new Set(v);
+      return;
+    }
+  } catch {}
+  try {
+    const raw = localStorage.getItem('algo_shad_solved');
+    if (raw)
+      for (const [k, v] of Object.entries(JSON.parse(raw)))
+        solved[k] = new Set(v);
   } catch {}
 }
 
 function saveSolved() {
   const out = {};
   for (const [k, v] of Object.entries(solved)) out[k] = [...v];
-  localStorage.setItem('algo_shad_solved', JSON.stringify(out));
+  const body = JSON.stringify(out);
+  localStorage.setItem('algo_shad_solved', body);
+  if (!window.__TOPICS__)
+    fetch('/api/solved', { method: 'POST', body }).catch(() => {});
 }
 
 function loadTimerPrefs() {
@@ -575,18 +605,34 @@ function switchView(v) {
   if (v === 'solved') renderSolvedView();
 }
 
+function exportSolved() {
+  const out = {};
+  for (const [k, v] of Object.entries(solved)) out[k] = [...v];
+  const blob = new Blob([JSON.stringify(out, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'solved.json';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
 function renderSolvedView() {
   const el = document.getElementById('solved-view');
   const sections = topics
     .map(t => ({ topic: t, problems: t.problems.filter(p => (solved[t.id] || new Set()).has(p.index)) }))
     .filter(s => s.problems.length > 0);
 
+  const exportBar = `<div style="display:flex;justify-content:flex-end;margin-bottom:16px">
+    <button class="unsolve-btn" style="padding:5px 12px;font-size:13px" onclick="exportSolved()">Export solved.json ↓</button>
+  </div>`;
+
   if (sections.length === 0) {
-    el.innerHTML = '<div class="status">No solved problems yet.</div>';
+    el.innerHTML = exportBar + '<div class="status" style="padding-top:16px">No solved problems yet.</div>';
     return;
   }
 
-  el.innerHTML = sections.map(({ topic, problems }) => `
+  el.innerHTML = exportBar + sections.map(({ topic, problems }) => `
     <div class="solved-section">
       <div class="solved-topic-name">${escHtml(topic.id)}</div>
       ${problems.map(p => {
@@ -641,16 +687,20 @@ function newSession() {
 // ── Init ──────────────────────────────────────────────────────────────────────
 
 async function init() {
-  loadSolved();
+  await loadSolved();
   loadTimerPrefs();
-  try {
-    const res = await fetch('/api/problems');
-    if (!res.ok) throw new Error(res.status);
-    topics = (await res.json()).topics;
-  } catch {
-    document.getElementById('problem-area').innerHTML =
-      '<div class="status">Could not load problems — is <code>server.py</code> running?</div>';
-    return;
+  if (window.__TOPICS__) {
+    topics = window.__TOPICS__;
+  } else {
+    try {
+      const res = await fetch('/api/problems');
+      if (!res.ok) throw new Error(res.status);
+      topics = (await res.json()).topics;
+    } catch {
+      document.getElementById('problem-area').innerHTML =
+        '<div class="status">Could not load problems — is <code>server.py</code> running?</div>';
+      return;
+    }
   }
   const allTopicIds = topics.map(t => t.id).sort();
   folderTree = buildTree(allTopicIds);
