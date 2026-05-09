@@ -85,6 +85,16 @@ body {
 }
 #timer-display.expired { color: #dc2626; }
 #overtime-label { color: #dc2626; font-size: 13px; }
+#timer-start-btn, #timer-reconfig-btn {
+  padding: 2px 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 5px;
+  background: #f9fafb;
+  font-size: 13px;
+  cursor: pointer;
+  color: #374151;
+}
+#timer-reconfig-btn { color: #6b7280; }
 /* .sidebar replaces .folder-bar */
 .folder-tree, .folder-subtree { list-style: none; }
 .folder-subtree { padding-left: 20px; margin-top: 2px; }
@@ -250,8 +260,10 @@ body {
           <input type="number" id="timer-min" min="0" max="99" value="0" title="minutes">
           <span>:</span>
           <input type="number" id="timer-sec" min="0" max="59" value="0" title="seconds">
+          <button id="timer-start-btn" onclick="userStartTimer()">Start</button>
           <span id="timer-display"></span>
           <span id="overtime-label"></span>
+          <button id="timer-reconfig-btn" onclick="reconfigureTimer()" style="display:none">Reconfigure</button>
         </div>
       </div>
       <hr class="divider">
@@ -281,6 +293,7 @@ let deck = [];
 let deckIdx = 0;
 let timerHandle = null;
 let timerRemaining = 0;
+let timerActive = false;
 let currentView = 'train';
 
 // ── Folder tree ───────────────────────────────────────────────────────────────
@@ -541,6 +554,7 @@ function advance() {
 // ── Timer ─────────────────────────────────────────────────────────────────────
 
 function startTimer() {
+  if (!timerActive) return;
   clearInterval(timerHandle);
   document.getElementById('overtime-label').textContent = '';
   document.getElementById('timer-display').classList.remove('expired');
@@ -565,6 +579,27 @@ function startTimer() {
       beep();
     }
   }, 1000);
+}
+
+function userStartTimer() {
+  timerActive = true;
+  document.getElementById('timer-min').disabled = true;
+  document.getElementById('timer-sec').disabled = true;
+  document.getElementById('timer-start-btn').style.display = 'none';
+  document.getElementById('timer-reconfig-btn').style.display = '';
+  startTimer();
+}
+
+function reconfigureTimer() {
+  timerActive = false;
+  clearInterval(timerHandle);
+  document.getElementById('timer-min').disabled = false;
+  document.getElementById('timer-sec').disabled = false;
+  document.getElementById('timer-start-btn').style.display = '';
+  document.getElementById('timer-reconfig-btn').style.display = 'none';
+  document.getElementById('timer-display').textContent = '';
+  document.getElementById('overtime-label').textContent = '';
+  document.getElementById('timer-display').classList.remove('expired');
 }
 
 function renderTimerDisplay() {
