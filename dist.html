@@ -299,6 +299,12 @@ body {
 .stats-table td.mono { font-variant-numeric: tabular-nums; }
 .stats-section-title { font-size: 14px; font-weight: 600; color: #374151; margin: 24px 0 10px; }
 .stats-section-title:first-of-type { margin-top: 0; }
+.stats-fold-btn {
+  background: none; border: none; cursor: pointer; padding: 0;
+  font-size: 10px; color: #9ca3af; width: 14px; display: inline-block;
+  text-align: center; vertical-align: middle;
+}
+.stats-fold-btn:hover { color: #374151; }
 .stats-bar { display: flex; justify-content: flex-end; margin-bottom: 16px; }
 .status-badge { display: inline-block; padding: 1px 7px; border-radius: 10px; font-size: 11px; font-weight: 500; }
 .status-badge.solved { background: #dcfce7; color: #15803d; }
@@ -424,6 +430,7 @@ let answers = {};
 let currentImages = [];
 let currentView = 'train';
 let timeStats = {};
+let statsCollapsed = new Set();
 let problemStartTime = null;
 
 // ── Folder tree ───────────────────────────────────────────────────────────────
@@ -1336,8 +1343,13 @@ function renderStatsView() {
     const agg = aggregateTopics(ids);
     const pad = depth * 16;
     const label = node.path.split('/').pop();
-    folderRows.push(`<tr>
-      <td style="padding-left:${10 + pad}px">${escHtml(label)}</td>
+    const hasChildren = Object.values(node.children).some(c => getSubtreeTopicIds(c).length > 0);
+    const pathAttr = escHtml(node.path);
+    const toggleHtml = hasChildren
+      ? `<button class="stats-fold-btn" data-stats-toggle="${pathAttr}" onclick="toggleStatsFolder('${pathAttr}')">▼</button>`
+      : `<span style="display:inline-block;width:14px"></span>`;
+    folderRows.push(`<tr data-stats-path="${pathAttr}">
+      <td style="padding-left:${10 + pad}px">${toggleHtml} ${escHtml(label)}</td>
       <td class="mono">${agg.total}</td>
       <td class="mono">${agg.solvedN}</td>
       <td class="mono">${agg.failedN}</td>
@@ -1390,6 +1402,24 @@ function renderStatsView() {
           </tr></thead>
           <tbody>${problemRows.join('')}</tbody>
         </table>`}`;
+  applyStatsCollapsed();
+}
+
+function applyStatsCollapsed() {
+  document.querySelectorAll('#stats-view tr[data-stats-path]').forEach(row => {
+    const rpath = row.dataset.statsPath;
+    const hidden = [...statsCollapsed].some(cp => rpath.startsWith(cp + '/'));
+    row.style.display = hidden ? 'none' : '';
+  });
+  document.querySelectorAll('#stats-view [data-stats-toggle]').forEach(btn => {
+    btn.textContent = statsCollapsed.has(btn.dataset.statsToggle) ? '▶' : '▼';
+  });
+}
+
+function toggleStatsFolder(path) {
+  if (statsCollapsed.has(path)) statsCollapsed.delete(path);
+  else statsCollapsed.add(path);
+  applyStatsCollapsed();
 }
 
 // ── Actions ───────────────────────────────────────────────────────────────────
