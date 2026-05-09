@@ -274,6 +274,23 @@ body {
   line-height: 1.7;
   color: #1f2937;
 }
+.stats-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 32px; }
+.stats-table th {
+  text-align: left; padding: 6px 10px;
+  border-bottom: 2px solid #e5e7eb;
+  color: #6b7280; font-weight: 600;
+  font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em;
+}
+.stats-table td { padding: 6px 10px; border-bottom: 1px solid #f3f4f6; color: #374151; }
+.stats-table tr:hover td { background: #f9fafb; }
+.stats-table td.mono { font-variant-numeric: tabular-nums; }
+.stats-section-title { font-size: 14px; font-weight: 600; color: #374151; margin: 24px 0 10px; }
+.stats-section-title:first-of-type { margin-top: 0; }
+.stats-bar { display: flex; justify-content: flex-end; margin-bottom: 16px; }
+.status-badge { display: inline-block; padding: 1px 7px; border-radius: 10px; font-size: 11px; font-weight: 500; }
+.status-badge.solved { background: #dcfce7; color: #15803d; }
+.status-badge.failed { background: #fee2e2; color: #dc2626; }
+.status-badge.unsolved { background: #f3f4f6; color: #9ca3af; }
 .hint-row { margin-bottom: 20px; }
 .hint-btn {
   background: none;
@@ -328,6 +345,7 @@ body {
       <button class="nav-tab active" onclick="switchView('train')">Train</button>
       <button class="nav-tab" onclick="switchView('solved')">Solved (<span id="solved-count">0</span>)</button>
       <button class="nav-tab" onclick="switchView('failed')">Failed (<span id="failed-count">0</span>)</button>
+      <button class="nav-tab" onclick="switchView('stats')">Stats</button>
     </div>
     <div id="train-view">
       <div class="header">
@@ -364,6 +382,7 @@ body {
     </div>
     <div id="solved-view" style="display:none"></div>
     <div id="failed-view" style="display:none"></div>
+    <div id="stats-view" style="display:none"></div>
   </div>
 </div>
 
@@ -382,6 +401,8 @@ let timerActive = false;
 let answers = {};
 let currentImages = [];
 let currentView = 'train';
+let timeStats = {};
+let problemStartTime = null;
 
 // ── Folder tree ───────────────────────────────────────────────────────────────
 
@@ -543,6 +564,17 @@ function loadAnswers() {
 
 function saveAnswers() {
   localStorage.setItem('algo_shad_answers', JSON.stringify(answers));
+}
+
+function loadTimeStats() {
+  try {
+    const raw = localStorage.getItem('algo_shad_time_stats');
+    if (raw) timeStats = JSON.parse(raw);
+  } catch {}
+}
+
+function saveTimeStats() {
+  localStorage.setItem('algo_shad_time_stats', JSON.stringify(timeStats));
 }
 
 function loadTimerPrefs() {
@@ -838,6 +870,7 @@ function showHint() {
 }
 
 function renderCurrent() {
+  problemStartTime = Date.now();
   const { topic, problem } = deck[deckIdx];
   document.getElementById('progress').textContent = `${totalUnsolved()} remaining`;
   renderFolderBar();
@@ -877,6 +910,51 @@ function toggleSidebar() {
   document.querySelector('.app').classList.toggle('collapsed');
 }
 
+function recordTime(outcome) {
+  if (problemStartTime === null || !deck.length || deckIdx >= deck.length) return;
+  const { topic, problem } = deck[deckIdx];
+  const elapsed = Math.round((Date.now() - problemStartTime) / 1000);
+  if (!timeStats[topic.id]) timeStats[topic.id] = {};
+  const key = String(problem.index);
+  if (!timeStats[topic.id][key])
+    timeStats[topic.id][key] = { totalSeconds: 0, attempts: 0, solveCount: 0, failCount: 0, skipCount: 0 };
+  const s = timeStats[topic.id][key];
+  s.totalSeconds += elapsed;
+  s.attempts++;
+  if (outcome === 'solved') s.solveCount++;
+  else if (outcome === 'failed') s.failCount++;
+  else s.skipCount++;
+  saveTimeStats();
+}
+
+function formatTime(s) {
+  if (!s) return '—';
+  if (s < 60) return `${s}s`;
+  const m = Math.floor(s / 60), sec = s % 60;
+  if (m < 60) return sec ? `${m}m ${sec}s` : `${m}m`;
+  const h = Math.floor(m / 60), min = m % 60;
+  return min ? `${h}h ${min}m` : `${h}h`;
+}
+
+function getSubtreeTopicIds(node) {
+  if (node.isLeaf) return node.topicId ? [node.topicId] : [];
+  return Object.values(node.children).flatMap(getSubtreeTopicIds);
+}
+
+function aggregateTopics(topicIds) {
+  let total = 0, solvedN = 0, failedN = 0, seconds = 0, attempts = 0;
+  for (const id of topicIds) {
+    const t = topics.find(x => x.id === id);
+    if (!t) continue;
+    total += t.problems.length;
+    solvedN += (solved[id] || new Set()).size;
+    failedN += (failed[id] || new Set()).size;
+    const ts = timeStats[id] || {};
+    for (const s of Object.values(ts)) { seconds += s.totalSeconds; attempts += s.attempts; }
+  }
+  return { total, solvedN, failedN, seconds, attempts };
+}
+
 function toggleProblemExpand(btn) {
   const box = btn.closest('.solved-item').querySelector('.problem-expand');
   const shown = box.style.display !== 'none';
@@ -909,6 +987,7 @@ function failProblem() {
   failed[topic.id].add(problem.index);
   saveFailed();
   updateFailedCount();
+  recordTime('failed');
   clearInterval(timerHandle);
   deckIdx++;
   advance();
@@ -969,11 +1048,14 @@ function switchView(v) {
   document.getElementById('train-view').style.display = v === 'train' ? '' : 'none';
   document.getElementById('solved-view').style.display = v === 'solved' ? '' : 'none';
   document.getElementById('failed-view').style.display = v === 'failed' ? '' : 'none';
+  document.getElementById('stats-view').style.display = v === 'stats' ? '' : 'none';
   const tabs = document.querySelectorAll('.nav-tab');
   tabs.forEach(t => t.classList.remove('active'));
-  tabs[v === 'train' ? 0 : v === 'solved' ? 1 : 2].classList.add('active');
+  const idx = { train: 0, solved: 1, failed: 2, stats: 3 }[v] ?? 0;
+  tabs[idx].classList.add('active');
   if (v === 'solved') renderSolvedView();
   if (v === 'failed') renderFailedView();
+  if (v === 'stats') renderStatsView();
 }
 
 function exportSolved() {
@@ -1043,6 +1125,119 @@ function unsolve(topicId, idx) {
   renderFolderBar();
 }
 
+function csvField(v) {
+  return '"' + String(v ?? '').replace(/"/g, '""') + '"';
+}
+
+function exportStatsCSV() {
+  const header = ['folder','topic_id','problem_index','status','total_seconds','attempts','solve_count','fail_count','skip_count','problem_type','problem_statement','answer_text','has_images'];
+  const rows = [header.join(',')];
+  for (const t of topics) {
+    const folder = t.id.includes('/') ? t.id.substring(0, t.id.lastIndexOf('/')) : t.id;
+    for (const p of t.problems) {
+      const isSolved = (solved[t.id] || new Set()).has(p.index);
+      const isFailed = (failed[t.id] || new Set()).has(p.index);
+      const status = isSolved ? 'solved' : isFailed ? 'failed' : 'unsolved';
+      const ts = timeStats[t.id]?.[String(p.index)] || { totalSeconds: 0, attempts: 0, solveCount: 0, failCount: 0, skipCount: 0 };
+      const ans = answers[t.id]?.[String(p.index)];
+      const stmt = p.url ? p.url : (p.content || '').replace(/\n/g, ' ').substring(0, 300);
+      rows.push([
+        csvField(folder), csvField(t.id), csvField(p.index), csvField(status),
+        csvField(ts.totalSeconds), csvField(ts.attempts),
+        csvField(ts.solveCount), csvField(ts.failCount), csvField(ts.skipCount),
+        csvField(p.url ? 'url' : 'text'), csvField(stmt),
+        csvField(ans?.text || ''), csvField(!!(ans?.images?.length)),
+      ].join(','));
+    }
+  }
+  const blob = new Blob([rows.join('\n')], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'stats.csv'; a.click();
+  URL.revokeObjectURL(url);
+}
+
+function renderStatsView() {
+  const el = document.getElementById('stats-view');
+
+  // ── Folder aggregate table ──────────────────────────────────────────────────
+  const folderRows = [];
+  const allIds = topics.map(t => t.id);
+  const allAgg = aggregateTopics(allIds);
+  folderRows.push(`<tr>
+    <td><strong>All</strong></td>
+    <td class="mono">${allAgg.total}</td>
+    <td class="mono">${allAgg.solvedN}</td>
+    <td class="mono">${allAgg.failedN}</td>
+    <td class="mono">${formatTime(allAgg.seconds)}</td>
+    <td class="mono">${allAgg.attempts || '—'}</td>
+  </tr>`);
+
+  function walkForStats(node, depth) {
+    if (node.path === null) {
+      for (const child of Object.values(node.children)) walkForStats(child, 0);
+      return;
+    }
+    const ids = getSubtreeTopicIds(node);
+    if (ids.length === 0) return;
+    const agg = aggregateTopics(ids);
+    const pad = depth * 16;
+    const label = node.path.split('/').pop();
+    folderRows.push(`<tr>
+      <td style="padding-left:${10 + pad}px">${escHtml(label)}</td>
+      <td class="mono">${agg.total}</td>
+      <td class="mono">${agg.solvedN}</td>
+      <td class="mono">${agg.failedN}</td>
+      <td class="mono">${formatTime(agg.seconds)}</td>
+      <td class="mono">${agg.attempts || '—'}</td>
+    </tr>`);
+    for (const child of Object.values(node.children)) walkForStats(child, depth + 1);
+  }
+  if (folderTree) walkForStats(folderTree, 0);
+
+  // ── Per-problem table ───────────────────────────────────────────────────────
+  const problemRows = [];
+  for (const t of topics) {
+    const ts = timeStats[t.id];
+    if (!ts) continue;
+    for (const [idxStr, s] of Object.entries(ts)) {
+      const idx = Number(idxStr);
+      const isSolved = (solved[t.id] || new Set()).has(idx);
+      const isFailed = (failed[t.id] || new Set()).has(idx);
+      const status = isSolved ? 'solved' : isFailed ? 'failed' : 'unsolved';
+      problemRows.push(`<tr>
+        <td>${escHtml(t.id)}</td>
+        <td class="mono">#${idx + 1}</td>
+        <td><span class="status-badge ${status}">${status}</span></td>
+        <td class="mono">${formatTime(s.totalSeconds)}</td>
+        <td class="mono">${s.attempts}</td>
+        <td class="mono">${s.solveCount} / ${s.failCount} / ${s.skipCount}</td>
+      </tr>`);
+    }
+  }
+
+  el.innerHTML = `
+    <div class="stats-bar">
+      <button class="unsolve-btn" style="padding:5px 12px;font-size:13px" onclick="exportStatsCSV()">Export CSV ↓</button>
+    </div>
+    <div class="stats-section-title">Folder Stats</div>
+    <table class="stats-table">
+      <thead><tr>
+        <th>Folder</th><th>Problems</th><th>Solved</th><th>Failed</th><th>Time Spent</th><th>Attempts</th>
+      </tr></thead>
+      <tbody>${folderRows.join('')}</tbody>
+    </table>
+    <div class="stats-section-title">Problem Stats</div>
+    ${problemRows.length === 0
+      ? '<div class="status" style="padding-top:0;text-align:left;color:#9ca3af;font-size:13px">No problems attempted yet.</div>'
+      : `<table class="stats-table">
+          <thead><tr>
+            <th>Topic</th><th>#</th><th>Status</th><th>Time</th><th>Attempts</th><th>S / F / Skip</th>
+          </tr></thead>
+          <tbody>${problemRows.join('')}</tbody>
+        </table>`}`;
+}
+
 // ── Actions ───────────────────────────────────────────────────────────────────
 
 function markSolved() {
@@ -1051,12 +1246,14 @@ function markSolved() {
   solved[topic.id].add(problem.index);
   saveSolved();
   updateSolvedCount();
+  recordTime('solved');
   clearInterval(timerHandle);
   deckIdx++;
   advance();
 }
 
 function skip() {
+  recordTime('skip');
   clearInterval(timerHandle);
   deckIdx++;
   advance();
@@ -1074,6 +1271,7 @@ async function init() {
   await loadSolved();
   loadFailed();
   loadAnswers();
+  loadTimeStats();
   loadCollapsed();
   loadTimerPrefs();
   const _tmin = +document.getElementById('timer-min').value || 0;
