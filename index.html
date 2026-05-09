@@ -147,6 +147,8 @@ body {
 .btn-primary:hover { background: #15803d; }
 .btn-secondary { background: white; color: #374151; border: 1px solid #d1d5db; }
 .btn-secondary:hover { background: #f9fafb; }
+.btn-danger { background: white; color: #dc2626; border: 1px solid #fca5a5; }
+.btn-danger:hover { background: #fef2f2; border-color: #f87171; }
 .status { color: #9ca3af; text-align: center; padding: 40px 0; font-size: 15px; }
 .done-area { text-align: center; padding: 16px 0 24px; }
 .done-area p { color: #374151; margin-bottom: 20px; }
@@ -176,11 +178,16 @@ body {
 }
 .solved-item {
   display: flex;
-  align-items: center;
-  gap: 10px;
+  flex-direction: column;
+  align-items: stretch;
   padding: 7px 2px;
   border-bottom: 1px solid #f3f4f6;
   font-size: 13px;
+}
+.solved-item-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 .solved-num { color: #d1d5db; min-width: 24px; }
 .solved-link { flex: 1; color: #2563eb; text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -198,6 +205,75 @@ body {
   transition: border-color 0.12s, color 0.12s, background 0.12s;
 }
 .unsolve-btn:hover { border-color: #fca5a5; color: #dc2626; background: #fef2f2; }
+#answer-section {
+  margin: 12px 0 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+#answer-text {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: inherit;
+  resize: vertical;
+  color: #374151;
+}
+#answer-image-list { display: flex; flex-wrap: wrap; gap: 8px; }
+.answer-thumb-wrap { position: relative; display: inline-block; }
+.answer-thumb-wrap img {
+  width: 80px; height: 80px; object-fit: cover;
+  border-radius: 5px; border: 1px solid #d1d5db; cursor: pointer;
+  display: block;
+}
+.answer-thumb-wrap .remove-img {
+  position: absolute; top: -5px; right: -5px;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: #6b7280; color: #fff; border: none;
+  font-size: 11px; line-height: 18px; text-align: center;
+  cursor: pointer; padding: 0;
+}
+#answer-drop-zone {
+  border: 1.5px dashed #d1d5db; border-radius: 6px;
+  padding: 10px 14px; font-size: 13px; color: #9ca3af;
+  text-align: center; cursor: default;
+  transition: border-color 0.15s, background 0.15s;
+}
+#answer-drop-zone.drag-over { border-color: #6b7280; background: #f9fafb; }
+.solved-answer {
+  margin-top: 6px; padding-top: 6px;
+  border-top: 1px solid #f3f4f6;
+  font-size: 13px; color: #374151;
+}
+.solved-answer-text { white-space: pre-wrap; word-break: break-word; }
+.solved-answer-images { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.solved-answer-images img {
+  width: 72px; height: 72px; object-fit: cover;
+  border-radius: 4px; border: 1px solid #d1d5db; cursor: pointer;
+}
+.expand-problem-btn {
+  flex-shrink: 0;
+  padding: 2px 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 5px;
+  background: #f9fafb;
+  font-size: 12px;
+  cursor: pointer;
+  color: #6b7280;
+}
+.problem-expand {
+  margin-top: 8px;
+  padding: 10px 14px;
+  background: #f9fafb;
+  border-radius: 6px;
+  border: 1px solid #f3f4f6;
+  font-size: 14px;
+  line-height: 1.7;
+  color: #1f2937;
+}
 .hint-row { margin-bottom: 20px; }
 .hint-btn {
   background: none;
@@ -251,6 +327,7 @@ body {
     <div class="nav-tabs">
       <button class="nav-tab active" onclick="switchView('train')">Train</button>
       <button class="nav-tab" onclick="switchView('solved')">Solved (<span id="solved-count">0</span>)</button>
+      <button class="nav-tab" onclick="switchView('failed')">Failed (<span id="failed-count">0</span>)</button>
     </div>
     <div id="train-view">
       <div class="header">
@@ -274,18 +351,26 @@ body {
         <button class="hint-btn" onclick="showHint()">Show hint</button>
         <div class="hint-path" id="hint-path"></div>
       </div>
+      <div id="answer-section" style="display:none">
+        <textarea id="answer-text" placeholder="Your answer…" rows="4"></textarea>
+        <div id="answer-image-list"></div>
+        <div id="answer-drop-zone">Paste or drop images here</div>
+      </div>
       <div class="actions" id="actions" style="display:none">
+        <button class="btn btn-danger" onclick="failProblem()">Fail ✗</button>
         <button class="btn btn-primary" onclick="markSolved()">Mark Solved ✓</button>
         <button class="btn btn-secondary" onclick="skip()">Skip →</button>
       </div>
     </div>
     <div id="solved-view" style="display:none"></div>
+    <div id="failed-view" style="display:none"></div>
   </div>
 </div>
 
 <script>
 let topics = [];
 let solved = {};
+let failed = {};
 let selectedTopics = new Set();
 let collapsedNodes = new Set();
 let folderTree = null;
@@ -294,6 +379,8 @@ let deckIdx = 0;
 let timerHandle = null;
 let timerRemaining = 0;
 let timerActive = false;
+let answers = {};
+let currentImages = [];
 let currentView = 'train';
 
 // ── Folder tree ───────────────────────────────────────────────────────────────
@@ -432,6 +519,32 @@ function saveSolved() {
     fetch('/api/solved', { method: 'POST', body }).catch(() => {});
 }
 
+function loadFailed() {
+  try {
+    const raw = localStorage.getItem('algo_shad_failed');
+    if (raw)
+      for (const [k, v] of Object.entries(JSON.parse(raw)))
+        failed[k] = new Set(v);
+  } catch {}
+}
+
+function saveFailed() {
+  const out = {};
+  for (const [k, v] of Object.entries(failed)) out[k] = [...v];
+  localStorage.setItem('algo_shad_failed', JSON.stringify(out));
+}
+
+function loadAnswers() {
+  try {
+    const raw = localStorage.getItem('algo_shad_answers');
+    if (raw) answers = JSON.parse(raw);
+  } catch {}
+}
+
+function saveAnswers() {
+  localStorage.setItem('algo_shad_answers', JSON.stringify(answers));
+}
+
 function loadTimerPrefs() {
   try {
     const t = JSON.parse(localStorage.getItem('algo_shad_timer') || '{}');
@@ -449,6 +562,35 @@ function saveTimerPrefs() {
 
 document.getElementById('timer-min').addEventListener('change', saveTimerPrefs);
 document.getElementById('timer-sec').addEventListener('change', saveTimerPrefs);
+
+document.getElementById('answer-text').addEventListener('input', saveCurrentAnswer);
+
+document.addEventListener('paste', e => {
+  if (document.getElementById('answer-section').style.display === 'none') return;
+  for (const item of e.clipboardData.items) {
+    if (item.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = ev => addAnswerImage(ev.target.result);
+      reader.readAsDataURL(item.getAsFile());
+      e.preventDefault();
+      break;
+    }
+  }
+});
+
+const _dz = document.getElementById('answer-drop-zone');
+_dz.addEventListener('dragover', e => { e.preventDefault(); _dz.classList.add('drag-over'); });
+_dz.addEventListener('dragleave', () => _dz.classList.remove('drag-over'));
+_dz.addEventListener('drop', e => {
+  e.preventDefault();
+  _dz.classList.remove('drag-over');
+  for (const file of e.dataTransfer.files) {
+    if (!file.type.startsWith('image/')) continue;
+    const reader = new FileReader();
+    reader.onload = ev => addAnswerImage(ev.target.result);
+    reader.readAsDataURL(file);
+  }
+});
 
 function loadTopicPrefs(allTopicIds) {
   try {
@@ -549,6 +691,51 @@ function advance() {
     if (deck.length === 0) { renderDone(); return; }
   }
   renderCurrent();
+}
+
+// ── Answers ───────────────────────────────────────────────────────────────────
+
+function renderAnswerThumbs() {
+  const list = document.getElementById('answer-image-list');
+  list.innerHTML = currentImages.map((src, i) => `
+    <div class="answer-thumb-wrap">
+      <img src="${src}" onclick="window.open(this.src)">
+      <button class="remove-img" onclick="removeAnswerImage(${i})">×</button>
+    </div>`).join('');
+}
+
+function addAnswerImage(dataUrl) {
+  currentImages.push(dataUrl);
+  renderAnswerThumbs();
+  saveCurrentAnswer();
+}
+
+function removeAnswerImage(i) {
+  currentImages.splice(i, 1);
+  renderAnswerThumbs();
+  saveCurrentAnswer();
+}
+
+function saveCurrentAnswer() {
+  if (!deck.length || deckIdx >= deck.length) return;
+  const { topic, problem } = deck[deckIdx];
+  if (!answers[topic.id]) answers[topic.id] = {};
+  const text = document.getElementById('answer-text').value;
+  answers[topic.id][String(problem.index)] = { text, images: [...currentImages] };
+  saveAnswers();
+}
+
+function loadAnswerForCurrent() {
+  currentImages = [];
+  document.getElementById('answer-text').value = '';
+  if (!deck.length || deckIdx >= deck.length) return;
+  const { topic, problem } = deck[deckIdx];
+  const saved = answers[topic.id]?.[String(problem.index)];
+  if (saved) {
+    document.getElementById('answer-text').value = saved.text || '';
+    currentImages = saved.images ? [...saved.images] : [];
+  }
+  renderAnswerThumbs();
 }
 
 // ── Timer ─────────────────────────────────────────────────────────────────────
@@ -655,6 +842,8 @@ function renderCurrent() {
   document.getElementById('progress').textContent = `${totalUnsolved()} remaining`;
   renderFolderBar();
   document.getElementById('actions').style.display = 'flex';
+  document.getElementById('answer-section').style.display = '';
+  loadAnswerForCurrent();
   // Reset hint
   const hintRow = document.getElementById('hint-row');
   hintRow.style.display = 'block';
@@ -676,6 +865,7 @@ function renderDone() {
   clearInterval(timerHandle);
   document.getElementById('progress').textContent = '0 remaining';
   document.getElementById('actions').style.display = 'none';
+  document.getElementById('answer-section').style.display = 'none';
   document.getElementById('problem-area').innerHTML = `
     <div class="done-area">
       <p>You've worked through all available problems!</p>
@@ -685,6 +875,14 @@ function renderDone() {
 
 function toggleSidebar() {
   document.querySelector('.app').classList.toggle('collapsed');
+}
+
+function toggleProblemExpand(btn) {
+  const box = btn.closest('.solved-item').querySelector('.problem-expand');
+  const shown = box.style.display !== 'none';
+  box.style.display = shown ? 'none' : '';
+  btn.textContent = shown ? 'Show problem' : 'Hide problem';
+  if (!shown && window.MathJax) MathJax.typesetPromise([box]);
 }
 
 // ── Solved view ───────────────────────────────────────────────────────────────
@@ -697,13 +895,85 @@ function updateSolvedCount() {
   document.getElementById('solved-count').textContent = totalSolvedCount();
 }
 
+function totalFailedCount() {
+  return Object.values(failed).reduce((n, s) => n + s.size, 0);
+}
+
+function updateFailedCount() {
+  document.getElementById('failed-count').textContent = totalFailedCount();
+}
+
+function failProblem() {
+  const { topic, problem } = deck[deckIdx];
+  if (!failed[topic.id]) failed[topic.id] = new Set();
+  failed[topic.id].add(problem.index);
+  saveFailed();
+  updateFailedCount();
+  clearInterval(timerHandle);
+  deckIdx++;
+  advance();
+}
+
+function unfail(topicId, idx) {
+  if (failed[topicId]) {
+    failed[topicId].delete(idx);
+    if (failed[topicId].size === 0) delete failed[topicId];
+  }
+  saveFailed();
+  updateFailedCount();
+  renderFailedView();
+}
+
+function renderFailedView() {
+  const el = document.getElementById('failed-view');
+  const sections = topics
+    .map(t => ({ topic: t, problems: t.problems.filter(p => (failed[t.id] || new Set()).has(p.index)) }))
+    .filter(s => s.problems.length > 0);
+
+  if (sections.length === 0) {
+    el.innerHTML = '<div class="status" style="padding-top:16px">No failed problems yet.</div>';
+    return;
+  }
+
+  el.innerHTML = sections.map(({ topic, problems }) => `
+    <div class="solved-section">
+      <div class="solved-topic-name">${escHtml(topic.id)}</div>
+      ${problems.map(p => {
+        const preview = p.url
+          ? `<a class="solved-link" href="${escHtml(p.url)}" target="_blank" rel="noopener">${escHtml(p.url.replace(/^https?:\/\//, ''))}</a>`
+          : `<span class="solved-preview">${escHtml(p.content.replace(/\n/g, ' ').substring(0, 90))}…</span>`;
+        const expandHtml = p.url ? '' : `
+          <div class="problem-expand" style="display:none">
+            <div class="problem-text">${parseWithMath(p.content)}</div>
+          </div>`;
+        const ans = answers[topic.id]?.[String(p.index)];
+        const ansHtml = (ans && (ans.text || (ans.images && ans.images.length))) ? `
+          <div class="solved-answer">
+            ${ans.text ? `<div class="solved-answer-text">${escHtml(ans.text)}</div>` : ''}
+            ${ans.images && ans.images.length ? `<div class="solved-answer-images">${ans.images.map(src => `<img src="${src}" onclick="window.open(this.src)">`).join('')}</div>` : ''}
+          </div>` : '';
+        return `<div class="solved-item">
+          <div class="solved-item-row">
+            <span class="solved-num">#${p.index + 1}</span>
+            ${preview}
+            ${p.url ? '' : `<button class="expand-problem-btn" onclick="toggleProblemExpand(this)">Show problem</button>`}
+            <button class="unsolve-btn" onclick="unfail('${escHtml(topic.id)}',${p.index})">Unfail</button>
+          </div>${expandHtml}${ansHtml}
+        </div>`;
+      }).join('')}
+    </div>`).join('');
+}
+
 function switchView(v) {
   currentView = v;
   document.getElementById('train-view').style.display = v === 'train' ? '' : 'none';
   document.getElementById('solved-view').style.display = v === 'solved' ? '' : 'none';
-  document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
-  document.querySelectorAll('.nav-tab')[v === 'train' ? 0 : 1].classList.add('active');
+  document.getElementById('failed-view').style.display = v === 'failed' ? '' : 'none';
+  const tabs = document.querySelectorAll('.nav-tab');
+  tabs.forEach(t => t.classList.remove('active'));
+  tabs[v === 'train' ? 0 : v === 'solved' ? 1 : 2].classList.add('active');
   if (v === 'solved') renderSolvedView();
+  if (v === 'failed') renderFailedView();
 }
 
 function exportSolved() {
@@ -740,10 +1010,23 @@ function renderSolvedView() {
         const preview = p.url
           ? `<a class="solved-link" href="${escHtml(p.url)}" target="_blank" rel="noopener">${escHtml(p.url.replace(/^https?:\/\//, ''))}</a>`
           : `<span class="solved-preview">${escHtml(p.content.replace(/\n/g, ' ').substring(0, 90))}…</span>`;
+        const expandHtml = p.url ? '' : `
+          <div class="problem-expand" style="display:none">
+            <div class="problem-text">${parseWithMath(p.content)}</div>
+          </div>`;
+        const ans = answers[topic.id]?.[String(p.index)];
+        const ansHtml = (ans && (ans.text || (ans.images && ans.images.length))) ? `
+          <div class="solved-answer">
+            ${ans.text ? `<div class="solved-answer-text">${escHtml(ans.text)}</div>` : ''}
+            ${ans.images && ans.images.length ? `<div class="solved-answer-images">${ans.images.map(src => `<img src="${src}" onclick="window.open(this.src)">`).join('')}</div>` : ''}
+          </div>` : '';
         return `<div class="solved-item">
-          <span class="solved-num">#${p.index + 1}</span>
-          ${preview}
-          <button class="unsolve-btn" onclick="unsolve('${escHtml(topic.id)}',${p.index})">Unsolve</button>
+          <div class="solved-item-row">
+            <span class="solved-num">#${p.index + 1}</span>
+            ${preview}
+            ${p.url ? '' : `<button class="expand-problem-btn" onclick="toggleProblemExpand(this)">Show problem</button>`}
+            <button class="unsolve-btn" onclick="unsolve('${escHtml(topic.id)}',${p.index})">Unsolve</button>
+          </div>${expandHtml}${ansHtml}
         </div>`;
       }).join('')}
     </div>`).join('');
@@ -789,8 +1072,13 @@ function newSession() {
 
 async function init() {
   await loadSolved();
+  loadFailed();
+  loadAnswers();
   loadCollapsed();
   loadTimerPrefs();
+  const _tmin = +document.getElementById('timer-min').value || 0;
+  const _tsec = +document.getElementById('timer-sec').value || 0;
+  if (_tmin * 60 + _tsec > 0) userStartTimer();
   if (window.__TOPICS__) {
     topics = window.__TOPICS__;
   } else {
@@ -808,6 +1096,7 @@ async function init() {
   folderTree = buildTree(allTopicIds);
   loadTopicPrefs(allTopicIds);
   updateSolvedCount();
+  updateFailedCount();
   renderFolderBar();
   advance();
 }
