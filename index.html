@@ -548,10 +548,16 @@ async function loadSolved() {
         return;
       }
     } catch {}
-    if (window.__SOLVED__) {
-      for (const [k, v] of Object.entries(window.__SOLVED__))
-        solved[k] = new Set(v);
-    }
+    try {
+      if (window.__PROGRESS__) {
+        for (const [topicId, entries] of Object.entries(window.__PROGRESS__))
+          for (const [idxStr, entry] of Object.entries(entries))
+            if (entry.status === 'solved') {
+              if (!solved[topicId]) solved[topicId] = new Set();
+              solved[topicId].add(Number(idxStr));
+            }
+      }
+    } catch {}
     return;
   }
   // Server mode: /api/solved is authoritative, localStorage is a fallback
@@ -583,9 +589,20 @@ function saveSolved() {
 function loadFailed() {
   try {
     const raw = localStorage.getItem('algo_shad_failed');
-    if (raw)
+    if (raw) {
       for (const [k, v] of Object.entries(JSON.parse(raw)))
         failed[k] = new Set(v);
+      return;
+    }
+  } catch {}
+  try {
+    if (window.__PROGRESS__)
+      for (const [topicId, entries] of Object.entries(window.__PROGRESS__))
+        for (const [idxStr, entry] of Object.entries(entries))
+          if (entry.status === 'failed') {
+            if (!failed[topicId]) failed[topicId] = new Set();
+            failed[topicId].add(Number(idxStr));
+          }
   } catch {}
 }
 
@@ -598,9 +615,20 @@ function saveFailed() {
 function loadBuried() {
   try {
     const raw = localStorage.getItem('algo_shad_buried');
-    if (raw)
+    if (raw) {
       for (const [k, v] of Object.entries(JSON.parse(raw)))
         buried[k] = new Set(v);
+      return;
+    }
+  } catch {}
+  try {
+    if (window.__PROGRESS__)
+      for (const [topicId, entries] of Object.entries(window.__PROGRESS__))
+        for (const [idxStr, entry] of Object.entries(entries))
+          if (entry.status === 'buried') {
+            if (!buried[topicId]) buried[topicId] = new Set();
+            buried[topicId].add(Number(idxStr));
+          }
   } catch {}
 }
 
@@ -613,7 +641,19 @@ function saveBuried() {
 function loadDifficulties() {
   try {
     const raw = localStorage.getItem('algo_shad_difficulties');
-    if (raw) difficulties = JSON.parse(raw);
+    if (raw) {
+      difficulties = JSON.parse(raw);
+      return;
+    }
+  } catch {}
+  try {
+    if (window.__PROGRESS__)
+      for (const [topicId, entries] of Object.entries(window.__PROGRESS__))
+        for (const [idxStr, entry] of Object.entries(entries))
+          if (entry.status === 'solved' && entry.difficulty) {
+            if (!difficulties[topicId]) difficulties[topicId] = {};
+            difficulties[topicId][idxStr] = entry.difficulty;
+          }
   } catch {}
 }
 
@@ -1113,7 +1153,8 @@ function renderFailedView() {
     .map(t => ({ topic: t, problems: t.problems.filter(p => (failed[t.id] || new Set()).has(p.index)) }))
     .filter(s => s.problems.length > 0);
 
-  const exportBar = `<div style="display:flex;justify-content:flex-end;margin-bottom:16px">
+  const exportBar = `<div style="display:flex;justify-content:flex-end;gap:8px;margin-bottom:16px">
+    <button class="unsolve-btn" style="padding:5px 12px;font-size:13px" onclick="importProgress()">Import progress.json ↑</button>
     <button class="unsolve-btn" style="padding:5px 12px;font-size:13px" onclick="exportProgress()">Export progress.json ↓</button>
   </div>`;
 
@@ -1157,7 +1198,8 @@ function renderBuriedView() {
     .map(t => ({ topic: t, problems: t.problems.filter(p => (buried[t.id] || new Set()).has(p.index)) }))
     .filter(s => s.problems.length > 0);
 
-  const exportBar = `<div style="display:flex;justify-content:flex-end;margin-bottom:16px">
+  const exportBar = `<div style="display:flex;justify-content:flex-end;gap:8px;margin-bottom:16px">
+    <button class="unsolve-btn" style="padding:5px 12px;font-size:13px" onclick="importProgress()">Import progress.json ↑</button>
     <button class="unsolve-btn" style="padding:5px 12px;font-size:13px" onclick="exportProgress()">Export progress.json ↓</button>
   </div>`;
 
@@ -1237,13 +1279,60 @@ function exportProgress() {
   URL.revokeObjectURL(url);
 }
 
+function importProgress() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.json,application/json';
+  input.onchange = async () => {
+    const file = input.files[0];
+    if (!file) return;
+    try {
+      const data = JSON.parse(await file.text());
+      for (const [topicId, entries] of Object.entries(data)) {
+        for (const [idxStr, entry] of Object.entries(entries)) {
+          const idx = Number(idxStr);
+          if (entry.status === 'solved') {
+            if (!solved[topicId]) solved[topicId] = new Set();
+            solved[topicId].add(idx);
+            if (entry.difficulty) {
+              if (!difficulties[topicId]) difficulties[topicId] = {};
+              difficulties[topicId][idxStr] = entry.difficulty;
+            }
+          } else if (entry.status === 'failed') {
+            if (!failed[topicId]) failed[topicId] = new Set();
+            failed[topicId].add(idx);
+          } else if (entry.status === 'buried') {
+            if (!buried[topicId]) buried[topicId] = new Set();
+            buried[topicId].add(idx);
+          }
+        }
+      }
+      saveSolved();
+      saveFailed();
+      saveBuried();
+      saveDifficulties();
+      updateSolvedCount();
+      updateFailedCount();
+      updateBuriedCount();
+      if (currentView === 'solved') renderSolvedView();
+      else if (currentView === 'failed') renderFailedView();
+      else if (currentView === 'buried') renderBuriedView();
+      else if (currentView === 'stats') renderStatsView();
+    } catch {
+      alert('Failed to import: invalid JSON');
+    }
+  };
+  input.click();
+}
+
 function renderSolvedView() {
   const el = document.getElementById('solved-view');
   const sections = topics
     .map(t => ({ topic: t, problems: t.problems.filter(p => (solved[t.id] || new Set()).has(p.index)) }))
     .filter(s => s.problems.length > 0);
 
-  const exportBar = `<div style="display:flex;justify-content:flex-end;margin-bottom:16px">
+  const exportBar = `<div style="display:flex;justify-content:flex-end;gap:8px;margin-bottom:16px">
+    <button class="unsolve-btn" style="padding:5px 12px;font-size:13px" onclick="importProgress()">Import progress.json ↑</button>
     <button class="unsolve-btn" style="padding:5px 12px;font-size:13px" onclick="exportProgress()">Export progress.json ↓</button>
   </div>`;
 
