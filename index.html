@@ -524,6 +524,17 @@ function loadCollapsed() {
   } catch { collapsedNodes = new Set(); }
 }
 
+function saveStatsCollapsed() {
+  localStorage.setItem('algo_shad_stats_collapsed', JSON.stringify([...statsCollapsed]));
+}
+
+function loadStatsCollapsed() {
+  try {
+    const saved = JSON.parse(localStorage.getItem('algo_shad_stats_collapsed') || '[]');
+    statsCollapsed = new Set(saved);
+  } catch { statsCollapsed = new Set(); }
+}
+
 // ── Persistence ───────────────────────────────────────────────────────────────
 
 async function loadSolved() {
@@ -978,7 +989,9 @@ function renderDone() {
 }
 
 function toggleSidebar() {
-  document.querySelector('.app').classList.toggle('collapsed');
+  const app = document.querySelector('.app');
+  app.classList.toggle('collapsed');
+  localStorage.setItem('algo_shad_sidebar', app.classList.contains('collapsed') ? '1' : '0');
 }
 
 function recordTime(outcome) {
@@ -1419,6 +1432,7 @@ function applyStatsCollapsed() {
 function toggleStatsFolder(path) {
   if (statsCollapsed.has(path)) statsCollapsed.delete(path);
   else statsCollapsed.add(path);
+  saveStatsCollapsed();
   applyStatsCollapsed();
 }
 
@@ -1474,6 +1488,9 @@ async function init() {
   loadAnswers();
   loadTimeStats();
   loadCollapsed();
+  loadStatsCollapsed();
+  if (localStorage.getItem('algo_shad_sidebar') === '1')
+    document.querySelector('.app').classList.add('collapsed');
   loadTimerPrefs();
   const _tmin = +document.getElementById('timer-min').value || 0;
   const _tsec = +document.getElementById('timer-sec').value || 0;
