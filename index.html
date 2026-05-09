@@ -368,6 +368,7 @@ body {
       <div class="hint-row" id="hint-row" style="display:none">
         <button class="hint-btn" onclick="showHint()">Show hint</button>
         <div class="hint-path" id="hint-path"></div>
+        <button class="hint-btn" id="copy-md-btn" onclick="copyMarkdown()" style="margin-left:auto">Copy markdown</button>
       </div>
       <div id="answer-section" style="display:none">
         <textarea id="answer-text" placeholder="Your answer…" rows="4"></textarea>
@@ -667,7 +668,8 @@ function toggleNode(path) {
 
 function firstUnsolved(topic) {
   const s = solved[topic.id] || new Set();
-  return topic.problems.find(p => !s.has(p.index)) ?? null;
+  const f = failed[topic.id] || new Set();
+  return topic.problems.find(p => !s.has(p.index) && !f.has(p.index)) ?? null;
 }
 
 function activeTopics() {
@@ -677,7 +679,8 @@ function activeTopics() {
 function totalUnsolved() {
   return activeTopics().reduce((n, t) => {
     const s = solved[t.id] || new Set();
-    return n + t.problems.filter(p => !s.has(p.index)).length;
+    const f = failed[t.id] || new Set();
+    return n + t.problems.filter(p => !s.has(p.index) && !f.has(p.index)).length;
   }, 0);
 }
 
@@ -869,6 +872,16 @@ function showHint() {
   btn.style.display = 'none';
 }
 
+function copyMarkdown() {
+  const { problem } = deck[deckIdx];
+  if (!problem.content) return;
+  navigator.clipboard.writeText(problem.content).then(() => {
+    const btn = document.getElementById('copy-md-btn');
+    btn.textContent = 'Copied!';
+    setTimeout(() => { btn.textContent = 'Copy markdown'; }, 1500);
+  });
+}
+
 function renderCurrent() {
   problemStartTime = Date.now();
   const { topic, problem } = deck[deckIdx];
@@ -882,6 +895,8 @@ function renderCurrent() {
   hintRow.style.display = 'block';
   hintRow.querySelector('.hint-btn').style.display = '';
   document.getElementById('hint-path').textContent = '';
+
+  document.getElementById('copy-md-btn').style.display = problem.url ? 'none' : '';
 
   const area = document.getElementById('problem-area');
   if (problem.url) {
