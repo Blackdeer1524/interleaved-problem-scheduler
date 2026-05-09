@@ -149,6 +149,19 @@ body {
 .btn-secondary:hover { background: #f9fafb; }
 .btn-danger { background: white; color: #dc2626; border: 1px solid #fca5a5; }
 .btn-danger:hover { background: #fef2f2; border-color: #f87171; }
+.btn-hard { background: white; color: #d97706; border: 1px solid #fcd34d; }
+.btn-hard:hover { background: #fffbeb; }
+.btn-good { background: white; color: #16a34a; border: 1px solid #86efac; }
+.btn-good:hover { background: #f0fdf4; }
+.btn-easy { background: white; color: #2563eb; border: 1px solid #93c5fd; }
+.btn-easy:hover { background: #eff6ff; }
+.diff-badge {
+  font-size: 10px; font-weight: 600; text-transform: uppercase;
+  padding: 1px 6px; border-radius: 8px; flex-shrink: 0;
+}
+.diff-badge.hard { background: #fff7ed; color: #d97706; }
+.diff-badge.good { background: #dcfce7; color: #15803d; }
+.diff-badge.easy { background: #eff6ff; color: #2563eb; }
 .status { color: #9ca3af; text-align: center; padding: 40px 0; font-size: 15px; }
 .done-area { text-align: center; padding: 16px 0 24px; }
 .done-area p { color: #374151; margin-bottom: 20px; }
@@ -290,6 +303,7 @@ body {
 .status-badge { display: inline-block; padding: 1px 7px; border-radius: 10px; font-size: 11px; font-weight: 500; }
 .status-badge.solved { background: #dcfce7; color: #15803d; }
 .status-badge.failed { background: #fee2e2; color: #dc2626; }
+.status-badge.skipped { background: #fef9c3; color: #a16207; }
 .status-badge.unsolved { background: #f3f4f6; color: #9ca3af; }
 .hint-row { margin-bottom: 20px; }
 .hint-btn {
@@ -345,6 +359,7 @@ body {
       <button class="nav-tab active" onclick="switchView('train')">Train</button>
       <button class="nav-tab" onclick="switchView('solved')">Solved (<span id="solved-count">0</span>)</button>
       <button class="nav-tab" onclick="switchView('failed')">Failed (<span id="failed-count">0</span>)</button>
+      <button class="nav-tab" onclick="switchView('skipped')">Skipped (<span id="skipped-count">0</span>)</button>
       <button class="nav-tab" onclick="switchView('stats')">Stats</button>
     </div>
     <div id="train-view">
@@ -377,12 +392,15 @@ body {
       </div>
       <div class="actions" id="actions" style="display:none">
         <button class="btn btn-danger" onclick="failProblem()">Fail ✗</button>
-        <button class="btn btn-primary" onclick="markSolved()">Mark Solved ✓</button>
-        <button class="btn btn-secondary" onclick="skip()">Skip →</button>
+        <button class="btn btn-hard" onclick="markSolved('hard')">Hard</button>
+        <button class="btn btn-good" onclick="markSolved('good')">Good</button>
+        <button class="btn btn-easy" onclick="markSolved('easy')">Easy</button>
+        <button class="btn btn-secondary" onclick="skipProblem()">Skip →</button>
       </div>
     </div>
     <div id="solved-view" style="display:none"></div>
     <div id="failed-view" style="display:none"></div>
+    <div id="skipped-view" style="display:none"></div>
     <div id="stats-view" style="display:none"></div>
   </div>
 </div>
@@ -391,6 +409,8 @@ body {
 let topics = [];
 let solved = {};
 let failed = {};
+let skipped = {};
+let difficulties = {};
 let selectedTopics = new Set();
 let collapsedNodes = new Set();
 let folderTree = null;
@@ -556,6 +576,32 @@ function saveFailed() {
   localStorage.setItem('algo_shad_failed', JSON.stringify(out));
 }
 
+function loadSkipped() {
+  try {
+    const raw = localStorage.getItem('algo_shad_skipped');
+    if (raw)
+      for (const [k, v] of Object.entries(JSON.parse(raw)))
+        skipped[k] = new Set(v);
+  } catch {}
+}
+
+function saveSkipped() {
+  const out = {};
+  for (const [k, v] of Object.entries(skipped)) out[k] = [...v];
+  localStorage.setItem('algo_shad_skipped', JSON.stringify(out));
+}
+
+function loadDifficulties() {
+  try {
+    const raw = localStorage.getItem('algo_shad_difficulties');
+    if (raw) difficulties = JSON.parse(raw);
+  } catch {}
+}
+
+function saveDifficulties() {
+  localStorage.setItem('algo_shad_difficulties', JSON.stringify(difficulties));
+}
+
 function loadAnswers() {
   try {
     const raw = localStorage.getItem('algo_shad_answers');
@@ -669,7 +715,8 @@ function toggleNode(path) {
 function firstUnsolved(topic) {
   const s = solved[topic.id] || new Set();
   const f = failed[topic.id] || new Set();
-  return topic.problems.find(p => !s.has(p.index) && !f.has(p.index)) ?? null;
+  const k = skipped[topic.id] || new Set();
+  return topic.problems.find(p => !s.has(p.index) && !f.has(p.index) && !k.has(p.index)) ?? null;
 }
 
 function activeTopics() {
@@ -680,7 +727,8 @@ function totalUnsolved() {
   return activeTopics().reduce((n, t) => {
     const s = solved[t.id] || new Set();
     const f = failed[t.id] || new Set();
-    return n + t.problems.filter(p => !s.has(p.index) && !f.has(p.index)).length;
+    const k = skipped[t.id] || new Set();
+    return n + t.problems.filter(p => !s.has(p.index) && !f.has(p.index) && !k.has(p.index)).length;
   }, 0);
 }
 
@@ -936,7 +984,9 @@ function recordTime(outcome) {
   const s = timeStats[topic.id][key];
   s.totalSeconds += elapsed;
   s.attempts++;
-  if (outcome === 'solved') s.solveCount++;
+  if (outcome === 'hard') { s.solveCount++; s.hardCount = (s.hardCount || 0) + 1; }
+  else if (outcome === 'good') { s.solveCount++; s.goodCount = (s.goodCount || 0) + 1; }
+  else if (outcome === 'easy') { s.solveCount++; s.easyCount = (s.easyCount || 0) + 1; }
   else if (outcome === 'failed') s.failCount++;
   else s.skipCount++;
   saveTimeStats();
@@ -996,6 +1046,14 @@ function updateFailedCount() {
   document.getElementById('failed-count').textContent = totalFailedCount();
 }
 
+function totalSkippedCount() {
+  return Object.values(skipped).reduce((n, s) => n + s.size, 0);
+}
+
+function updateSkippedCount() {
+  document.getElementById('skipped-count').textContent = totalSkippedCount();
+}
+
 function failProblem() {
   const { topic, problem } = deck[deckIdx];
   if (!failed[topic.id]) failed[topic.id] = new Set();
@@ -1018,18 +1076,32 @@ function unfail(topicId, idx) {
   renderFailedView();
 }
 
+function unskip(topicId, idx) {
+  if (skipped[topicId]) {
+    skipped[topicId].delete(idx);
+    if (skipped[topicId].size === 0) delete skipped[topicId];
+  }
+  saveSkipped();
+  updateSkippedCount();
+  renderSkippedView();
+}
+
 function renderFailedView() {
   const el = document.getElementById('failed-view');
   const sections = topics
     .map(t => ({ topic: t, problems: t.problems.filter(p => (failed[t.id] || new Set()).has(p.index)) }))
     .filter(s => s.problems.length > 0);
 
+  const exportBar = `<div style="display:flex;justify-content:flex-end;margin-bottom:16px">
+    <button class="unsolve-btn" style="padding:5px 12px;font-size:13px" onclick="exportProgress()">Export progress.json ↓</button>
+  </div>`;
+
   if (sections.length === 0) {
-    el.innerHTML = '<div class="status" style="padding-top:16px">No failed problems yet.</div>';
+    el.innerHTML = exportBar + '<div class="status" style="padding-top:16px">No failed problems yet.</div>';
     return;
   }
 
-  el.innerHTML = sections.map(({ topic, problems }) => `
+  el.innerHTML = exportBar + sections.map(({ topic, problems }) => `
     <div class="solved-section">
       <div class="solved-topic-name">${escHtml(topic.id)}</div>
       ${problems.map(p => {
@@ -1058,45 +1130,18 @@ function renderFailedView() {
     </div>`).join('');
 }
 
-function switchView(v) {
-  currentView = v;
-  document.getElementById('train-view').style.display = v === 'train' ? '' : 'none';
-  document.getElementById('solved-view').style.display = v === 'solved' ? '' : 'none';
-  document.getElementById('failed-view').style.display = v === 'failed' ? '' : 'none';
-  document.getElementById('stats-view').style.display = v === 'stats' ? '' : 'none';
-  const tabs = document.querySelectorAll('.nav-tab');
-  tabs.forEach(t => t.classList.remove('active'));
-  const idx = { train: 0, solved: 1, failed: 2, stats: 3 }[v] ?? 0;
-  tabs[idx].classList.add('active');
-  if (v === 'solved') renderSolvedView();
-  if (v === 'failed') renderFailedView();
-  if (v === 'stats') renderStatsView();
-}
-
-function exportSolved() {
-  const out = {};
-  for (const [k, v] of Object.entries(solved)) out[k] = [...v];
-  const blob = new Blob([JSON.stringify(out, null, 2)], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'solved.json';
-  a.click();
-  URL.revokeObjectURL(url);
-}
-
-function renderSolvedView() {
-  const el = document.getElementById('solved-view');
+function renderSkippedView() {
+  const el = document.getElementById('skipped-view');
   const sections = topics
-    .map(t => ({ topic: t, problems: t.problems.filter(p => (solved[t.id] || new Set()).has(p.index)) }))
+    .map(t => ({ topic: t, problems: t.problems.filter(p => (skipped[t.id] || new Set()).has(p.index)) }))
     .filter(s => s.problems.length > 0);
 
   const exportBar = `<div style="display:flex;justify-content:flex-end;margin-bottom:16px">
-    <button class="unsolve-btn" style="padding:5px 12px;font-size:13px" onclick="exportSolved()">Export solved.json ↓</button>
+    <button class="unsolve-btn" style="padding:5px 12px;font-size:13px" onclick="exportProgress()">Export progress.json ↓</button>
   </div>`;
 
   if (sections.length === 0) {
-    el.innerHTML = exportBar + '<div class="status" style="padding-top:16px">No solved problems yet.</div>';
+    el.innerHTML = exportBar + '<div class="status" style="padding-top:16px">No skipped problems yet.</div>';
     return;
   }
 
@@ -1122,6 +1167,95 @@ function renderSolvedView() {
             <span class="solved-num">#${p.index + 1}</span>
             ${preview}
             ${p.url ? '' : `<button class="expand-problem-btn" onclick="toggleProblemExpand(this)">Show problem</button>`}
+            <button class="unsolve-btn" onclick="unskip('${escHtml(topic.id)}',${p.index})">Unskip</button>
+          </div>${expandHtml}${ansHtml}
+        </div>`;
+      }).join('')}
+    </div>`).join('');
+}
+
+function switchView(v) {
+  currentView = v;
+  document.getElementById('train-view').style.display = v === 'train' ? '' : 'none';
+  document.getElementById('solved-view').style.display = v === 'solved' ? '' : 'none';
+  document.getElementById('failed-view').style.display = v === 'failed' ? '' : 'none';
+  document.getElementById('skipped-view').style.display = v === 'skipped' ? '' : 'none';
+  document.getElementById('stats-view').style.display = v === 'stats' ? '' : 'none';
+  const tabs = document.querySelectorAll('.nav-tab');
+  tabs.forEach(t => t.classList.remove('active'));
+  const idx = { train: 0, solved: 1, failed: 2, skipped: 3, stats: 4 }[v] ?? 0;
+  tabs[idx].classList.add('active');
+  if (v === 'solved') renderSolvedView();
+  if (v === 'failed') renderFailedView();
+  if (v === 'skipped') renderSkippedView();
+  if (v === 'stats') renderStatsView();
+}
+
+function exportProgress() {
+  const out = {};
+  const allIds = new Set([
+    ...Object.keys(solved),
+    ...Object.keys(failed),
+    ...Object.keys(skipped),
+  ]);
+  for (const topicId of allIds) {
+    out[topicId] = {};
+    for (const idx of (solved[topicId] || new Set()))
+      out[topicId][String(idx)] = { status: 'solved', difficulty: difficulties[topicId]?.[String(idx)] ?? 'good' };
+    for (const idx of (failed[topicId] || new Set()))
+      out[topicId][String(idx)] = { status: 'failed' };
+    for (const idx of (skipped[topicId] || new Set()))
+      out[topicId][String(idx)] = { status: 'skipped' };
+  }
+  const blob = new Blob([JSON.stringify(out, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'progress.json';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function renderSolvedView() {
+  const el = document.getElementById('solved-view');
+  const sections = topics
+    .map(t => ({ topic: t, problems: t.problems.filter(p => (solved[t.id] || new Set()).has(p.index)) }))
+    .filter(s => s.problems.length > 0);
+
+  const exportBar = `<div style="display:flex;justify-content:flex-end;margin-bottom:16px">
+    <button class="unsolve-btn" style="padding:5px 12px;font-size:13px" onclick="exportProgress()">Export progress.json ↓</button>
+  </div>`;
+
+  if (sections.length === 0) {
+    el.innerHTML = exportBar + '<div class="status" style="padding-top:16px">No solved problems yet.</div>';
+    return;
+  }
+
+  el.innerHTML = exportBar + sections.map(({ topic, problems }) => `
+    <div class="solved-section">
+      <div class="solved-topic-name">${escHtml(topic.id)}</div>
+      ${problems.map(p => {
+        const preview = p.url
+          ? `<a class="solved-link" href="${escHtml(p.url)}" target="_blank" rel="noopener">${escHtml(p.url.replace(/^https?:\/\//, ''))}</a>`
+          : `<span class="solved-preview">${escHtml(p.content.replace(/\n/g, ' ').substring(0, 90))}…</span>`;
+        const expandHtml = p.url ? '' : `
+          <div class="problem-expand" style="display:none">
+            <div class="problem-text">${parseWithMath(p.content)}</div>
+          </div>`;
+        const ans = answers[topic.id]?.[String(p.index)];
+        const ansHtml = (ans && (ans.text || (ans.images && ans.images.length))) ? `
+          <div class="solved-answer">
+            ${ans.text ? `<div class="solved-answer-text">${escHtml(ans.text)}</div>` : ''}
+            ${ans.images && ans.images.length ? `<div class="solved-answer-images">${ans.images.map(src => `<img src="${src}" onclick="window.open(this.src)">`).join('')}</div>` : ''}
+          </div>` : '';
+        const diff = difficulties[topic.id]?.[String(p.index)];
+        const diffBadge = diff ? `<span class="diff-badge ${diff}">${diff}</span>` : '';
+        return `<div class="solved-item">
+          <div class="solved-item-row">
+            <span class="solved-num">#${p.index + 1}</span>
+            ${diffBadge}
+            ${preview}
+            ${p.url ? '' : `<button class="expand-problem-btn" onclick="toggleProblemExpand(this)">Show problem</button>`}
             <button class="unsolve-btn" onclick="unsolve('${escHtml(topic.id)}',${p.index})">Unsolve</button>
           </div>${expandHtml}${ansHtml}
         </div>`;
@@ -1145,21 +1279,24 @@ function csvField(v) {
 }
 
 function exportStatsCSV() {
-  const header = ['folder','topic_id','problem_index','status','total_seconds','attempts','solve_count','fail_count','skip_count','problem_type','problem_statement','answer_text','has_images'];
+  const header = ['folder','topic_id','problem_index','status','difficulty','total_seconds','attempts','hard_count','good_count','easy_count','fail_count','skip_count','problem_type','problem_statement','answer_text','has_images'];
   const rows = [header.join(',')];
   for (const t of topics) {
     const folder = t.id.includes('/') ? t.id.substring(0, t.id.lastIndexOf('/')) : t.id;
     for (const p of t.problems) {
       const isSolved = (solved[t.id] || new Set()).has(p.index);
       const isFailed = (failed[t.id] || new Set()).has(p.index);
-      const status = isSolved ? 'solved' : isFailed ? 'failed' : 'unsolved';
-      const ts = timeStats[t.id]?.[String(p.index)] || { totalSeconds: 0, attempts: 0, solveCount: 0, failCount: 0, skipCount: 0 };
+      const isSkipped = (skipped[t.id] || new Set()).has(p.index);
+      const status = isSolved ? 'solved' : isFailed ? 'failed' : isSkipped ? 'skipped' : 'unsolved';
+      const diff = difficulties[t.id]?.[String(p.index)] ?? '';
+      const ts = timeStats[t.id]?.[String(p.index)] || { totalSeconds: 0, attempts: 0, hardCount: 0, goodCount: 0, easyCount: 0, failCount: 0, skipCount: 0 };
       const ans = answers[t.id]?.[String(p.index)];
       const stmt = p.url ? p.url : (p.content || '').replace(/\n/g, ' ').substring(0, 300);
       rows.push([
-        csvField(folder), csvField(t.id), csvField(p.index), csvField(status),
+        csvField(folder), csvField(t.id), csvField(p.index), csvField(status), csvField(diff),
         csvField(ts.totalSeconds), csvField(ts.attempts),
-        csvField(ts.solveCount), csvField(ts.failCount), csvField(ts.skipCount),
+        csvField(ts.hardCount||0), csvField(ts.goodCount||0), csvField(ts.easyCount||0),
+        csvField(ts.failCount), csvField(ts.skipCount),
         csvField(p.url ? 'url' : 'text'), csvField(stmt),
         csvField(ans?.text || ''), csvField(!!(ans?.images?.length)),
       ].join(','));
@@ -1219,14 +1356,15 @@ function renderStatsView() {
       const idx = Number(idxStr);
       const isSolved = (solved[t.id] || new Set()).has(idx);
       const isFailed = (failed[t.id] || new Set()).has(idx);
-      const status = isSolved ? 'solved' : isFailed ? 'failed' : 'unsolved';
+      const isSkipped = (skipped[t.id] || new Set()).has(idx);
+      const status = isSolved ? 'solved' : isFailed ? 'failed' : isSkipped ? 'skipped' : 'unsolved';
       problemRows.push(`<tr>
         <td>${escHtml(t.id)}</td>
         <td class="mono">#${idx + 1}</td>
         <td><span class="status-badge ${status}">${status}</span></td>
         <td class="mono">${formatTime(s.totalSeconds)}</td>
         <td class="mono">${s.attempts}</td>
-        <td class="mono">${s.solveCount} / ${s.failCount} / ${s.skipCount}</td>
+        <td class="mono">${s.hardCount||0} / ${s.goodCount||0} / ${s.easyCount||0} / ${s.failCount} / ${s.skipCount}</td>
       </tr>`);
     }
   }
@@ -1247,7 +1385,7 @@ function renderStatsView() {
       ? '<div class="status" style="padding-top:0;text-align:left;color:#9ca3af;font-size:13px">No problems attempted yet.</div>'
       : `<table class="stats-table">
           <thead><tr>
-            <th>Topic</th><th>#</th><th>Status</th><th>Time</th><th>Attempts</th><th>S / F / Skip</th>
+            <th>Topic</th><th>#</th><th>Status</th><th>Time</th><th>Attempts</th><th>H / G / E / F / Skip</th>
           </tr></thead>
           <tbody>${problemRows.join('')}</tbody>
         </table>`}`;
@@ -1255,19 +1393,27 @@ function renderStatsView() {
 
 // ── Actions ───────────────────────────────────────────────────────────────────
 
-function markSolved() {
+function markSolved(difficulty) {
   const { topic, problem } = deck[deckIdx];
   if (!solved[topic.id]) solved[topic.id] = new Set();
   solved[topic.id].add(problem.index);
   saveSolved();
+  if (!difficulties[topic.id]) difficulties[topic.id] = {};
+  difficulties[topic.id][String(problem.index)] = difficulty;
+  saveDifficulties();
   updateSolvedCount();
-  recordTime('solved');
+  recordTime(difficulty);
   clearInterval(timerHandle);
   deckIdx++;
   advance();
 }
 
-function skip() {
+function skipProblem() {
+  const { topic, problem } = deck[deckIdx];
+  if (!skipped[topic.id]) skipped[topic.id] = new Set();
+  skipped[topic.id].add(problem.index);
+  saveSkipped();
+  updateSkippedCount();
   recordTime('skip');
   clearInterval(timerHandle);
   deckIdx++;
@@ -1285,6 +1431,8 @@ function newSession() {
 async function init() {
   await loadSolved();
   loadFailed();
+  loadSkipped();
+  loadDifficulties();
   loadAnswers();
   loadTimeStats();
   loadCollapsed();
@@ -1310,6 +1458,7 @@ async function init() {
   loadTopicPrefs(allTopicIds);
   updateSolvedCount();
   updateFailedCount();
+  updateSkippedCount();
   renderFolderBar();
   advance();
 }
