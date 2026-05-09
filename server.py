@@ -8,7 +8,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).parent
 PROBLEMS_DIR = ROOT / 'problems'
-SOLVED_FILE = ROOT / 'solved.json'
+SOLVED_FILE = ROOT / 'progress.json'
 
 
 def parse_md(path: Path) -> list[dict]:

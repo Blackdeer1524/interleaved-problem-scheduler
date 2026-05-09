@@ -395,7 +395,8 @@ body {
         <button class="btn btn-hard" onclick="markSolved('hard')">Hard</button>
         <button class="btn btn-good" onclick="markSolved('good')">Good</button>
         <button class="btn btn-easy" onclick="markSolved('easy')">Easy</button>
-        <button class="btn btn-secondary" onclick="buryProblem()">Bury →</button>
+        <button class="btn btn-secondary" onclick="delayProblem()">Delay</button>
+        <button class="btn btn-secondary" onclick="buryProblem()">Bury</button>
       </div>
     </div>
     <div id="solved-view" style="display:none"></div>
@@ -1403,6 +1404,13 @@ function markSolved(difficulty) {
   saveDifficulties();
   updateSolvedCount();
   recordTime(difficulty);
+  clearInterval(timerHandle);
+  deckIdx++;
+  advance();
+}
+
+function delayProblem() {
+  recordTime('skip');
   clearInterval(timerHandle);
   deckIdx++;
   advance();

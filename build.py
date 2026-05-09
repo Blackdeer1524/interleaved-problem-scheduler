@@ -8,7 +8,7 @@ ROOT = Path(__file__).parent
 topics = build_topics()
 topics_data = json.dumps(topics, ensure_ascii=False)
 
-solved_path = ROOT / 'solved.json'
+solved_path = ROOT / 'progress.json'
 solved_data = solved_path.read_text(encoding='utf-8') if solved_path.exists() else '{}'
 
 template = (ROOT / 'index.html').read_text(encoding='utf-8')
