@@ -1,5 +1,5 @@
 {
-  "mathematics/probability/[17] 25-12-02 (5.2) Метод индикаторов": {
+  "mathematics/probability/[17] 25-12-02 (5.2) Метод индикаторов/[17] 25-12-02 (5.2) Метод индикаторов": {
     "0": {
       "status": "solved",
       "difficulty": "easy"
@@ -12,7 +12,7 @@
       "status": "failed"
     }
   },
-  "mathematics/probability/[14] 25-11-24 (6.3) Условная вероятность": {
+  "mathematics/probability/[14] 25-11-24 (6.3) Условная вероятность/[14] 25-11-24 (6.3) Условная вероятность": {
     "0": {
       "status": "solved",
       "difficulty": "easy"
@@ -37,7 +37,7 @@
       "status": "failed"
     }
   },
-  "mathematics/probability/[14] 25-11-24 (6.4) Геометрическая вероятность": {
+  "mathematics/probability/[14] 25-11-24 (6.4) Геометрическая вероятность/[14] 25-11-24 (6.4) Геометрическая вероятность": {
     "0": {
       "status": "solved",
       "difficulty": "hard"
@@ -47,7 +47,7 @@
       "difficulty": "good"
     }
   },
-  "mathematics/probability/[14] 25-11-24 (6.1) Классика": {
+  "mathematics/probability/[14] 25-11-24 (6.1) Классика/[14] 25-11-24 (6.1) Классика": {
     "0": {
       "status": "solved",
       "difficulty": "easy"
@@ -57,7 +57,7 @@
       "difficulty": "easy"
     }
   },
-  "mathematics/probability/[07] 25-10-28 (2) Рекурренты в комбинаторике 101": {
+  "mathematics/probability/[07] 25-10-28 (2) Рекурренты в комбинаторике 101/[07] 25-10-28 (2) Рекурренты в комбинаторике 101": {
     "0": {
       "status": "solved",
       "difficulty": "easy"
@@ -67,7 +67,7 @@
       "difficulty": "good"
     }
   },
-  "mathematics/probability/[17] 25-12-02 (5.1) Дискретные случайные величины": {
+  "mathematics/probability/[17] 25-12-02 (5.1) Дискретные случайные величины/[17] 25-12-02 (5.1) Дискретные случайные величины": {
     "0": {
       "status": "solved",
       "difficulty": "good"
@@ -76,7 +76,7 @@
       "status": "buried"
     }
   },
-  "mathematics/probability/[01] 25-10-03 (2) Правило суммы и произведения 101": {
+  "mathematics/probability/[01] 25-10-03 (2) Правило суммы и произведения 101/[01] 25-10-03 (2) Правило суммы и произведения 101": {
     "0": {
       "status": "failed"
     },
@@ -89,7 +89,7 @@
       "difficulty": "good"
     }
   },
-  "mathematics/probability/[20] 25-12-08 (5.1) Непрерывное распределение": {
+  "mathematics/probability/[20] 25-12-08 (5.1) Непрерывное распределение/[20] 25-12-08 (5.1) Непрерывное распределение": {
     "0": {
       "status": "solved",
       "difficulty": "good"
@@ -101,13 +101,13 @@
       "status": "buried"
     }
   },
-  "mathematics/probability/[04] 25-10-21 (5) Комбинаторика и теория чисел 101": {
+  "mathematics/probability/[04] 25-10-21 (5) Комбинаторика и теория чисел 101/[04] 25-10-21 (5) Комбинаторика и теория чисел 101": {
     "0": {
       "status": "solved",
       "difficulty": "easy"
     }
   },
-  "mathematics/probability/[14] 25-11-24 (6.2) Арифметика событий": {
+  "mathematics/probability/[14] 25-11-24 (6.2) Арифметика событий/[14] 25-11-24 (6.2) Арифметика событий": {
     "0": {
       "status": "failed"
     },
@@ -120,13 +120,13 @@
       "difficulty": "easy"
     }
   },
-  "mathematics/probability/[05] 25-10-21 (8) Комбинаторика и теория чисел 102": {
+  "mathematics/probability/[05] 25-10-21 (8) Комбинаторика и теория чисел 102/[05] 25-10-21 (8) Комбинаторика и теория чисел 102": {
     "0": {
       "status": "solved",
       "difficulty": "good"
     }
   },
-  "mathematics/probability/[10] 25-11-04 (4) Теория вероятностей 101": {
+  "mathematics/probability/[10] 25-11-04 (4) Теория вероятностей 101/[10] 25-11-04 (4) Теория вероятностей 101": {
     "0": {
       "status": "failed"
     },
@@ -137,7 +137,7 @@
       "status": "buried"
     }
   },
-  "mathematics/probability/[03] 25-10-21 (2) Правило суммы и произведения 102": {
+  "mathematics/probability/[03] 25-10-21 (2) Правило суммы и произведения 102/[03] 25-10-21 (2) Правило суммы и произведения 102": {
     "0": {
       "status": "failed"
     }
