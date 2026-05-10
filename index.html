@@ -890,21 +890,21 @@ function startTimer() {
 
   const min = +document.getElementById('timer-min').value || 0;
   const sec = +document.getElementById('timer-sec').value || 0;
-  timerRemaining = min * 60 + sec;
+  const limit = min * 60 + sec;
 
-  if (timerRemaining <= 0) {
+  timerRemaining = 0;
+
+  if (limit <= 0) {
     document.getElementById('timer-display').textContent = '';
     return;
   }
 
   renderTimerDisplay();
   timerHandle = setInterval(() => {
-    timerRemaining--;
+    timerRemaining++;
     renderTimerDisplay();
-    if (timerRemaining <= 0) {
-      clearInterval(timerHandle);
+    if (timerRemaining === limit) {
       document.getElementById('timer-display').classList.add('expired');
-      document.getElementById('overtime-label').textContent = '⏰ Time\'s up';
       beep();
     }
   }, 1000);
