@@ -372,6 +372,16 @@ body {
 }
 .folder-arrow:hover { color: #374151; }
 .folder-arrow-spacer { width: 14px; flex-shrink: 0; }
+.sidebar-resizer {
+  width: 5px;
+  flex-shrink: 0;
+  cursor: col-resize;
+  background: transparent;
+  transition: background 0.15s;
+  z-index: 10;
+}
+.sidebar-resizer:hover, .sidebar-resizer.dragging { background: #3b82f6; }
+.app.collapsed .sidebar-resizer { display: none; }
 </style>
 </head>
 <body>
@@ -382,6 +392,7 @@ body {
     </div>
     <div id="folder-bar"></div>
   </aside>
+  <div class="sidebar-resizer" id="sidebar-resizer"></div>
   <div class="main">
     <div class="nav-tabs">
       <button class="nav-tab active" onclick="switchView('train')">Train</button>
@@ -1107,8 +1118,15 @@ function renderDone() {
 
 function toggleSidebar() {
   const app = document.querySelector('.app');
-  app.classList.toggle('collapsed');
-  localStorage.setItem('algo_shad_sidebar', app.classList.contains('collapsed') ? '1' : '0');
+  const sidebar = document.querySelector('.sidebar');
+  const isCollapsed = app.classList.toggle('collapsed');
+  if (isCollapsed) {
+    sidebar.style.width = '';
+  } else {
+    const saved = localStorage.getItem('algo_shad_sidebar_width');
+    if (saved) sidebar.style.width = saved + 'px';
+  }
+  localStorage.setItem('algo_shad_sidebar', isCollapsed ? '1' : '0');
 }
 
 function recordTime(outcome) {
@@ -1655,8 +1673,37 @@ async function init() {
   loadTimeStats();
   loadCollapsed();
   loadStatsCollapsed();
-  if (localStorage.getItem('algo_shad_sidebar') === '1')
-    document.querySelector('.app').classList.add('collapsed');
+  const _isCollapsed = localStorage.getItem('algo_shad_sidebar') === '1';
+  if (_isCollapsed) document.querySelector('.app').classList.add('collapsed');
+  const _sidebar = document.querySelector('.sidebar');
+  if (!_isCollapsed) {
+    const _sw = localStorage.getItem('algo_shad_sidebar_width');
+    if (_sw) _sidebar.style.width = _sw + 'px';
+  }
+  (function() {
+    const resizer = document.getElementById('sidebar-resizer');
+    const MIN = 160, MAX = 600;
+    resizer.addEventListener('mousedown', e => {
+      e.preventDefault();
+      resizer.classList.add('dragging');
+      _sidebar.style.transition = 'none';
+      const startX = e.clientX;
+      const startW = _sidebar.getBoundingClientRect().width;
+      function onMove(e) {
+        const w = Math.min(MAX, Math.max(MIN, startW + e.clientX - startX));
+        _sidebar.style.width = w + 'px';
+      }
+      function onUp() {
+        resizer.classList.remove('dragging');
+        _sidebar.style.transition = '';
+        localStorage.setItem('algo_shad_sidebar_width', parseInt(_sidebar.style.width));
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup', onUp);
+      }
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup', onUp);
+    });
+  })();
   loadTimerPrefs();
   const _tmin = +document.getElementById('timer-min').value || 0;
   const _tsec = +document.getElementById('timer-sec').value || 0;
