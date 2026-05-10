@@ -113,6 +113,21 @@ body {
 .folder-row:hover { background: #f3f4f6; }
 .folder-row input[type=checkbox] { cursor: pointer; accent-color: #2563eb; margin: 0; }
 .folder-count { color: #9ca3af; font-weight: 500; margin-left: auto; padding-left: 8px; }
+.level-buttons { display: flex; gap: 6px; padding: 6px 6px 4px; }
+.level-btn {
+  flex: 1;
+  padding: 4px 0;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid #d1d5db;
+  background: white;
+  color: #374151;
+  transition: background 0.12s, border-color 0.12s;
+}
+.level-btn:hover { background: #f3f4f6; }
+.level-btn.active { background: #2563eb; color: white; border-color: #2563eb; }
 .divider { border: none; border-top: 1px solid #f3f4f6; margin: 0 0 24px; }
 .problem-area { min-height: 80px; margin-bottom: 28px; }
 .link-problem { text-align: center; padding: 16px 0; }
@@ -746,7 +761,15 @@ function saveTopicPrefs() {
 
 function renderFolderBar() {
   const bar = document.getElementById('folder-bar');
-  bar.innerHTML = `<ul class="folder-tree">${renderTreeHtml(folderTree)}</ul>`;
+  const allLeaves = getLeaves(folderTree);
+  const levelButtons = ['junior', 'middle', 'senior'].map(level => {
+    const matching = allLeaves.filter(id => id.split('/').includes(level));
+    if (!matching.length) return '';
+    const allSel = matching.every(id => selectedTopics.has(id));
+    const label = level[0].toUpperCase() + level.slice(1);
+    return `<button class="level-btn${allSel ? ' active' : ''}" onclick="selectByLevel('${level}')">${label}</button>`;
+  }).join('');
+  bar.innerHTML = `<div class="level-buttons">${levelButtons}</div><ul class="folder-tree">${renderTreeHtml(folderTree)}</ul>`;
   bar.querySelectorAll('input[data-indet="true"]').forEach(cb => { cb.indeterminate = true; });
 }
 
@@ -765,6 +788,23 @@ function toggleNode(path) {
   renderFolderBar();
   deck = [];
   deckIdx = 0;
+  clearInterval(timerHandle);
+  advance();
+}
+
+function selectByLevel(level) {
+  const matching = getLeaves(folderTree).filter(id => id.split('/').includes(level));
+  if (!matching.length) return;
+  const allSel = matching.every(id => selectedTopics.has(id));
+  if (allSel) {
+    matching.forEach(id => selectedTopics.delete(id));
+    if (selectedTopics.size === 0) matching.forEach(id => selectedTopics.add(id));
+  } else {
+    matching.forEach(id => selectedTopics.add(id));
+  }
+  saveTopicPrefs();
+  renderFolderBar();
+  deck = []; deckIdx = 0;
   clearInterval(timerHandle);
   advance();
 }
