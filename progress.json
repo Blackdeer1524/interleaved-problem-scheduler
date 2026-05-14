@@ -1,1 +1,200 @@
-{"mathematics/probability/[17] 25-12-02 (5.2) Метод индикаторов/[17] 25-12-02 (5.2) Метод индикаторов": {"0": {"status": "solved", "difficulty": "easy"}, "1": {"status": "solved", "difficulty": "good"}, "2": {"status": "failed"}}, "mathematics/probability/[14] 25-11-24 (6.3) Условная вероятность/[14] 25-11-24 (6.3) Условная вероятность": {"0": {"status": "solved", "difficulty": "easy"}, "1": {"status": "solved", "difficulty": "easy"}, "2": {"status": "solved", "difficulty": "easy"}, "3": {"status": "solved", "difficulty": "good"}, "4": {"status": "solved", "difficulty": "easy"}, "5": {"status": "failed"}}, "mathematics/probability/[14] 25-11-24 (6.4) Геометрическая вероятность/[14] 25-11-24 (6.4) Геометрическая вероятность": {"0": {"status": "solved", "difficulty": "hard"}, "1": {"status": "solved", "difficulty": "good"}}, "mathematics/probability/[14] 25-11-24 (6.1) Классика/[14] 25-11-24 (6.1) Классика": {"0": {"status": "solved", "difficulty": "easy"}, "1": {"status": "solved", "difficulty": "easy"}}, "mathematics/probability/[07] 25-10-28 (2) Рекурренты в комбинаторике 101/[07] 25-10-28 (2) Рекурренты в комбинаторике 101": {"0": {"status": "solved", "difficulty": "easy"}, "1": {"status": "solved", "difficulty": "good"}}, "mathematics/probability/[17] 25-12-02 (5.1) Дискретные случайные величины/[17] 25-12-02 (5.1) Дискретные случайные величины": {"0": {"status": "solved", "difficulty": "good"}, "1": {"status": "buried"}}, "mathematics/probability/[01] 25-10-03 (2) Правило суммы и произведения 101/[01] 25-10-03 (2) Правило суммы и произведения 101": {"0": {"status": "failed"}, "1": {"status": "solved", "difficulty": "good"}, "2": {"status": "solved", "difficulty": "good"}}, "mathematics/probability/[20] 25-12-08 (5.1) Непрерывное распределение/[20] 25-12-08 (5.1) Непрерывное распределение": {"0": {"status": "solved", "difficulty": "good"}, "1": {"status": "buried"}, "2": {"status": "buried"}}, "mathematics/probability/[04] 25-10-21 (5) Комбинаторика и теория чисел 101/[04] 25-10-21 (5) Комбинаторика и теория чисел 101": {"0": {"status": "solved", "difficulty": "easy"}}, "mathematics/probability/[14] 25-11-24 (6.2) Арифметика событий/[14] 25-11-24 (6.2) Арифметика событий": {"0": {"status": "failed"}, "1": {"status": "solved", "difficulty": "good"}, "2": {"status": "solved", "difficulty": "easy"}}, "mathematics/probability/[05] 25-10-21 (8) Комбинаторика и теория чисел 102/[05] 25-10-21 (8) Комбинаторика и теория чисел 102": {"0": {"status": "solved", "difficulty": "good"}}, "mathematics/probability/[10] 25-11-04 (4) Теория вероятностей 101/[10] 25-11-04 (4) Теория вероятностей 101": {"0": {"status": "failed"}, "1": {"status": "failed"}, "2": {"status": "buried"}}, "mathematics/probability/[03] 25-10-21 (2) Правило суммы и произведения 102/[03] 25-10-21 (2) Правило суммы и произведения 102": {"0": {"status": "failed"}}, "mathematics/probability/[17] 25-12-02 (5.2) Метод индикаторов": [0, 1], "mathematics/probability/[14] 25-11-24 (6.3) Условная вероятность": [0, 1, 2, 3, 4], "mathematics/probability/[14] 25-11-24 (6.4) Геометрическая вероятность": [0, 1], "mathematics/probability/[14] 25-11-24 (6.1) Классика": [0, 1], "mathematics/probability/[07] 25-10-28 (2) Рекурренты в комбинаторике 101": [0, 1], "mathematics/probability/[17] 25-12-02 (5.1) Дискретные случайные величины": [0], "mathematics/probability/[01] 25-10-03 (2) Правило суммы и произведения 101": [1, 2], "mathematics/probability/[20] 25-12-08 (5.1) Непрерывное распределение": [0], "mathematics/probability/[04] 25-10-21 (5) Комбинаторика и теория чисел 101": [0], "mathematics/probability/[14] 25-11-24 (6.2) Арифметика событий": [1, 2], "mathematics/probability/[05] 25-10-21 (8) Комбинаторика и теория чисел 102": [0], "mathematics/probability/[17] 25-12-02/[02] Метод индикаторов/junior/14 Четыре кости матожидание дисперсия": [0]}
+{
+  "mathematics/probability/[17] 25-12-02 (5.2) Метод индикаторов": {
+    "0": {
+      "status": "solved",
+      "difficulty": "easy"
+    },
+    "1": {
+      "status": "solved",
+      "difficulty": "good"
+    },
+    "2": {
+      "status": "failed"
+    }
+  },
+  "mathematics/probability/[14] 25-11-24 (6.3) Условная вероятность": {
+    "0": {
+      "status": "solved",
+      "difficulty": "easy"
+    },
+    "1": {
+      "status": "solved",
+      "difficulty": "easy"
+    },
+    "2": {
+      "status": "solved",
+      "difficulty": "easy"
+    },
+    "3": {
+      "status": "solved",
+      "difficulty": "good"
+    },
+    "4": {
+      "status": "solved",
+      "difficulty": "easy"
+    },
+    "5": {
+      "status": "failed"
+    }
+  },
+  "mathematics/probability/[14] 25-11-24 (6.4) Геометрическая вероятность": {
+    "0": {
+      "status": "solved",
+      "difficulty": "hard"
+    },
+    "1": {
+      "status": "solved",
+      "difficulty": "good"
+    }
+  },
+  "mathematics/probability/[14] 25-11-24 (6.1) Классика": {
+    "0": {
+      "status": "solved",
+      "difficulty": "easy"
+    },
+    "1": {
+      "status": "solved",
+      "difficulty": "easy"
+    }
+  },
+  "mathematics/probability/[07] 25-10-28 (2) Рекурренты в комбинаторике 101": {
+    "0": {
+      "status": "solved",
+      "difficulty": "easy"
+    },
+    "1": {
+      "status": "solved",
+      "difficulty": "good"
+    }
+  },
+  "mathematics/probability/[17] 25-12-02 (5.1) Дискретные случайные величины": {
+    "0": {
+      "status": "solved",
+      "difficulty": "good"
+    },
+    "1": {
+      "status": "buried"
+    }
+  },
+  "mathematics/probability/[01] 25-10-03 (2) Правило суммы и произведения 101": {
+    "0": {
+      "status": "failed"
+    },
+    "1": {
+      "status": "solved",
+      "difficulty": "good"
+    },
+    "2": {
+      "status": "solved",
+      "difficulty": "good"
+    }
+  },
+  "mathematics/probability/[20] 25-12-08 (5.1) Непрерывное распределение": {
+    "0": {
+      "status": "solved",
+      "difficulty": "good"
+    },
+    "1": {
+      "status": "buried"
+    },
+    "2": {
+      "status": "buried"
+    }
+  },
+  "mathematics/probability/[04] 25-10-21 (5) Комбинаторика и теория чисел 101": {
+    "0": {
+      "status": "solved",
+      "difficulty": "easy"
+    }
+  },
+  "mathematics/probability/[14] 25-11-24 (6.2) Арифметика событий": {
+    "0": {
+      "status": "failed"
+    },
+    "1": {
+      "status": "solved",
+      "difficulty": "good"
+    },
+    "2": {
+      "status": "solved",
+      "difficulty": "easy"
+    }
+  },
+  "mathematics/probability/[05] 25-10-21 (8) Комбинаторика и теория чисел 102": {
+    "0": {
+      "status": "solved",
+      "difficulty": "good"
+    },
+    "1": {
+      "status": "solved",
+      "difficulty": "easy"
+    }
+  },
+  "mathematics/probability/[17] 25-12-02/[02] Метод индикаторов/junior/14 Четыре кости матожидание дисперсия": {
+    "0": {
+      "status": "solved",
+      "difficulty": "easy"
+    }
+  },
+  "mathematics/probability/[14] 25-11-24/[03] Условная вероятность/middle/48 Две урны белый последовательный": {
+    "0": {
+      "status": "solved",
+      "difficulty": "easy"
+    }
+  },
+  "algorithms/two_pointers": {
+    "0": {
+      "status": "solved",
+      "difficulty": "easy"
+    }
+  },
+  "mathematics/probability/[17] 25-12-02/[01] Дискретные случайные величины/middle/4 Игрок рубли раунды матожидание": {
+    "0": {
+      "status": "solved",
+      "difficulty": "easy"
+    }
+  },
+  "mathematics/probability/[20] 25-12-08/[03] Многомерное распредление/middle/37 Треугольник из трёх отрезков": {
+    "0": {
+      "status": "solved",
+      "difficulty": "easy"
+    }
+  },
+  "mathematics/probability/[17] 25-12-02/[01] Дискретные случайные величины/middle/9 Равномерное убывание номер матожидание": {
+    "0": {
+      "status": "solved",
+      "difficulty": "good"
+    }
+  },
+  "mathematics/probability/[10] 25-11-04 (4) Теория вероятностей 101": {
+    "0": {
+      "status": "failed"
+    },
+    "1": {
+      "status": "failed"
+    },
+    "2": {
+      "status": "buried"
+    }
+  },
+  "mathematics/probability/[03] 25-10-21 (2) Правило суммы и произведения 102": {
+    "0": {
+      "status": "failed"
+    }
+  },
+  "mathematics/probability/[20] 25-12-08/[01] Непрерывное распределение/junior/3 Непрерывная функция дискретное распределение": {
+    "0": {
+      "status": "buried"
+    }
+  },
+  "mathematics/probability/[26] 25-12-24 Условное распределение 102/[02] Дискретное условное математическое ожидание/middle/11 Составное распределение матожидание Вальд": {
+    "0": {
+      "status": "buried"
+    }
+  },
+  "mathematics/analysis/[13] 25-11-24 (6) Пределы и последовательности/[01] Последовательности/middle/06 График предела функции": {
+    "0": {
+      "status": "buried"
+    }
+  }
+}
