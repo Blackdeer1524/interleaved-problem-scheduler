@@ -863,7 +863,7 @@ function firstUnsolved(topic) {
   const s = solved[topic.id] || new Set();
   const f = failed[topic.id] || new Set();
   const k = buried[topic.id] || new Set();
-  return topic.problems.find(p => !s.has(p.index) && !f.has(p.index) && !k.has(p.index)) ?? null;
+  return topic.problems.find(p => !s.has(p.index) && !k.has(p.index)) ?? null;
 }
 
 function activeTopics() {
@@ -873,9 +873,8 @@ function activeTopics() {
 function totalUnsolved() {
   return activeTopics().reduce((n, t) => {
     const s = solved[t.id] || new Set();
-    const f = failed[t.id] || new Set();
     const k = buried[t.id] || new Set();
-    return n + t.problems.filter(p => !s.has(p.index) && !f.has(p.index) && !k.has(p.index)).length;
+    return n + t.problems.filter(p => !s.has(p.index) && !k.has(p.index)).length;
   }, 0);
 }
 
@@ -1864,6 +1863,10 @@ window.__PROGRESS__ = {
     "1": {
       "status": "solved",
       "difficulty": "easy"
+    },
+    "2": {
+      "status": "solved",
+      "difficulty": "easy"
     }
   },
   "mathematics/probability/[17] 25-12-02/[02] Метод индикаторов/junior/14 Четыре кости матожидание дисперсия": {
@@ -1902,6 +1905,30 @@ window.__PROGRESS__ = {
       "difficulty": "good"
     }
   },
+  "mathematics/probability/[14] 25-11-24/[02] Арифметика событий/middle/18 Монета орлы подряд рекуррентность": {
+    "0": {
+      "status": "solved",
+      "difficulty": "easy"
+    }
+  },
+  "mathematics/probability/[26] 25-12-24 Условное распределение 102/[02] Дискретное условное математическое ожидание/senior/14 Дерево ветки груши матожидание": {
+    "0": {
+      "status": "solved",
+      "difficulty": "good"
+    }
+  },
+  "mathematics/probability/[14] 25-11-24/[04] Геометрическая вероятность/senior/70 Саньцзегунь палки пересечение крайние": {
+    "0": {
+      "status": "solved",
+      "difficulty": "easy"
+    }
+  },
+  "mathematics/analysis/[21] 25-12-08 (7) Дифференцируемые функции 102/[03] Произовдная/middle/32 Экстремумы функции": {
+    "0": {
+      "status": "solved",
+      "difficulty": "easy"
+    }
+  },
   "mathematics/probability/[10] 25-11-04 (4) Теория вероятностей 101": {
     "0": {
       "status": "failed"
@@ -1918,6 +1945,41 @@ window.__PROGRESS__ = {
       "status": "failed"
     }
   },
+  "mathematics/analysis/[21] 25-12-08 (7) Дифференцируемые функции 102/[01] Непреррывность/middle/04 Теорема Коши о промежуточном значении": {
+    "0": {
+      "status": "failed"
+    }
+  },
+  "mathematics/analysis/[13] 25-11-24 (6) Пределы и последовательности/[02] Ряды/middle/19 Бесконечные произведения (тригонометрические)": {
+    "0": {
+      "status": "failed"
+    }
+  },
+  "mathematics/probability/[17] 25-12-02/[01] Дискретные случайные величины/senior/12 Рулетка сумма среднее число": {
+    "0": {
+      "status": "failed"
+    }
+  },
+  "mathematics/probability/[20] 25-12-08/[03] Многомерное распредление/middle/28 Ковариация максимум отрезок": {
+    "0": {
+      "status": "failed"
+    }
+  },
+  "mathematics/analysis/[21] 25-12-08 (7) Дифференцируемые функции 102/[03] Произовдная/middle/27 Максимальное a для системы": {
+    "0": {
+      "status": "failed"
+    }
+  },
+  "mathematics/probability/[14] 25-11-24/[02] Арифметика событий/middle/25 Автомобиль интервал вероятность шоссе": {
+    "0": {
+      "status": "failed"
+    }
+  },
+  "mathematics/probability/[26] 25-12-24 Условное распределение 102/[03] Непрерывное условное математическое ожидание/senior/27 Параллелограмм две точки расстояние": {
+    "0": {
+      "status": "failed"
+    }
+  },
   "mathematics/probability/[20] 25-12-08/[01] Непрерывное распределение/junior/3 Непрерывная функция дискретное распределение": {
     "0": {
       "status": "buried"
@@ -1929,6 +1991,41 @@ window.__PROGRESS__ = {
     }
   },
   "mathematics/analysis/[13] 25-11-24 (6) Пределы и последовательности/[01] Последовательности/middle/06 График предела функции": {
+    "0": {
+      "status": "buried"
+    }
+  },
+  "mathematics/analysis/[21] 25-12-08 (7) Дифференцируемые функции 102/[01] Непреррывность/middle/09 Наименьший период непрерывной функции": {
+    "0": {
+      "status": "buried"
+    }
+  },
+  "mathematics/analysis/[21] 25-12-08 (7) Дифференцируемые функции 102/[03] Произовдная/middle/30 Уравнение f'f=x": {
+    "0": {
+      "status": "buried"
+    }
+  },
+  "mathematics/analysis/[21] 25-12-08 (7) Дифференцируемые функции 102/[03] Произовдная/middle/26 Теорема Ролля для f через x": {
+    "0": {
+      "status": "buried"
+    }
+  },
+  "mathematics/probability/[26] 25-12-24 Условное распределение 102/[03] Непрерывное условное математическое ожидание/senior/26 Нормальный вектор функция минимизация": {
+    "0": {
+      "status": "buried"
+    }
+  },
+  "mathematics/analysis/[13] 25-11-24 (6) Пределы и последовательности/[04] Предел функции/middle/32 Функция с заданным множеством непрерывности": {
+    "0": {
+      "status": "buried"
+    }
+  },
+  "mathematics/probability/[14] 25-11-24/[02] Арифметика событий/senior/26 Многогранники кости симуляция": {
+    "0": {
+      "status": "buried"
+    }
+  },
+  "mathematics/probability/[17] 25-12-02/[01] Дискретные случайные величины/senior/11 Геометрическое распределение свойство памяти": {
     "0": {
       "status": "buried"
     }

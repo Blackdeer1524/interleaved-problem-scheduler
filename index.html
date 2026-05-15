@@ -863,7 +863,7 @@ function firstUnsolved(topic) {
   const s = solved[topic.id] || new Set();
   const f = failed[topic.id] || new Set();
   const k = buried[topic.id] || new Set();
-  return topic.problems.find(p => !s.has(p.index) && !f.has(p.index) && !k.has(p.index)) ?? null;
+  return topic.problems.find(p => !s.has(p.index) && !k.has(p.index)) ?? null;
 }
 
 function activeTopics() {
@@ -873,9 +873,8 @@ function activeTopics() {
 function totalUnsolved() {
   return activeTopics().reduce((n, t) => {
     const s = solved[t.id] || new Set();
-    const f = failed[t.id] || new Set();
     const k = buried[t.id] || new Set();
-    return n + t.problems.filter(p => !s.has(p.index) && !f.has(p.index) && !k.has(p.index)).length;
+    return n + t.problems.filter(p => !s.has(p.index) && !k.has(p.index)).length;
   }, 0);
 }
 
