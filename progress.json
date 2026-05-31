@@ -1,782 +1,301 @@
 {
-    "courses/mathematics/probability/[17] 25-12-02 (5.2) Метод индикаторов": {
-        "0": {
-            "status": "solved",
-            "difficulty": "easy"
-        },
-        "1": {
-            "status": "solved",
-            "difficulty": "good"
-        },
-        "2": {
-            "status": "failed"
-        }
-    },
-    "courses/mathematics/probability/[14] 25-11-24 (6.3) Условная вероятность": {
-        "0": {
-            "status": "solved",
-            "difficulty": "easy"
-        },
-        "1": {
-            "status": "solved",
-            "difficulty": "easy"
-        },
-        "2": {
-            "status": "solved",
-            "difficulty": "easy"
-        },
-        "3": {
-            "status": "solved",
-            "difficulty": "good"
-        },
-        "4": {
-            "status": "solved",
-            "difficulty": "easy"
-        },
-        "5": {
-            "status": "failed"
-        }
-    },
-    "courses/mathematics/probability/[14] 25-11-24 (6.4) Геометрическая вероятность": {
-        "0": {
-            "status": "solved",
-            "difficulty": "hard"
-        },
-        "1": {
-            "status": "solved",
-            "difficulty": "good"
-        }
-    },
-    "courses/mathematics/probability/[14] 25-11-24 (6.1) Классика": {
-        "0": {
-            "status": "solved",
-            "difficulty": "easy"
-        },
-        "1": {
-            "status": "solved",
-            "difficulty": "easy"
-        }
-    },
-    "courses/mathematics/probability/[07] 25-10-28 (2) Рекурренты в комбинаторике 101": {
-        "0": {
-            "status": "solved",
-            "difficulty": "easy"
-        },
-        "1": {
-            "status": "solved",
-            "difficulty": "good"
-        }
-    },
-    "courses/mathematics/probability/[17] 25-12-02 (5.1) Дискретные случайные величины": {
-        "0": {
-            "status": "solved",
-            "difficulty": "good"
-        },
-        "1": {
-            "status": "buried"
-        }
-    },
-    "courses/mathematics/probability/[01] 25-10-03 (2) Правило суммы и произведения 101": {
-        "0": {
-            "status": "failed"
-        },
-        "1": {
-            "status": "solved",
-            "difficulty": "good"
-        },
-        "2": {
-            "status": "solved",
-            "difficulty": "good"
-        }
-    },
-    "courses/mathematics/probability/[20] 25-12-08 (5.1) Непрерывное распределение": {
-        "0": {
-            "status": "solved",
-            "difficulty": "good"
-        },
-        "1": {
-            "status": "buried"
-        },
-        "2": {
-            "status": "buried"
-        }
-    },
-    "courses/mathematics/probability/[04] 25-10-21 (5) Комбинаторика и теория чисел 101": {
-        "0": {
-            "status": "solved",
-            "difficulty": "easy"
-        }
-    },
-    "courses/mathematics/probability/[14] 25-11-24 (6.2) Арифметика событий": {
-        "0": {
-            "status": "failed"
-        },
-        "1": {
-            "status": "solved",
-            "difficulty": "good"
-        },
-        "2": {
-            "status": "solved",
-            "difficulty": "easy"
-        }
-    },
-    "courses/mathematics/probability/[05] 25-10-21 (8) Комбинаторика и теория чисел 102": {
-        "0": {
-            "status": "solved",
-            "difficulty": "good"
-        },
-        "1": {
-            "status": "solved",
-            "difficulty": "easy"
-        },
-        "2": {
-            "status": "solved",
-            "difficulty": "easy"
-        }
-    },
-    "courses/mathematics/probability/[17] 25-12-02/[02] Метод индикаторов/junior/14 Четыре кости матожидание дисперсия": {
-        "0": {
-            "status": "solved",
-            "difficulty": "easy"
-        }
-    },
-    "courses/mathematics/probability/[14] 25-11-24/[03] Условная вероятность/middle/48 Две урны белый последовательный": {
-        "0": {
-            "status": "solved",
-            "difficulty": "easy"
-        }
-    },
-    "algorithms/two_pointers": {
-        "0": {
-            "status": "solved",
-            "difficulty": "easy"
-        }
-    },
-    "courses/mathematics/probability/[17] 25-12-02/[01] Дискретные случайные величины/middle/4 Игрок рубли раунды матожидание": {
-        "0": {
-            "status": "solved",
-            "difficulty": "easy"
-        }
-    },
-    "courses/mathematics/probability/[20] 25-12-08/[03] Многомерное распредление/middle/37 Треугольник из трёх отрезков": {
-        "0": {
-            "status": "solved",
-            "difficulty": "easy"
-        }
-    },
-    "courses/mathematics/probability/[17] 25-12-02/[01] Дискретные случайные величины/middle/9 Равномерное убывание номер матожидание": {
-        "0": {
-            "status": "solved",
-            "difficulty": "good"
-        }
-    },
-    "courses/mathematics/probability/[14] 25-11-24/[02] Арифметика событий/middle/18 Монета орлы подряд рекуррентность": {
-        "0": {
-            "status": "solved",
-            "difficulty": "easy"
-        }
-    },
-    "courses/mathematics/probability/[26] 25-12-24 Условное распределение 102/[02] Дискретное условное математическое ожидание/senior/14 Дерево ветки груши матожидание": {
-        "0": {
-            "status": "solved",
-            "difficulty": "good"
-        }
-    },
-    "courses/mathematics/probability/[14] 25-11-24/[04] Геометрическая вероятность/senior/70 Саньцзегунь палки пересечение крайние": {
-        "0": {
-            "status": "solved",
-            "difficulty": "easy"
-        }
-    },
-    "courses/mathematics/analysis/[21] 25-12-08 (7) Дифференцируемые функции 102/[03] Произовдная/middle/32 Экстремумы функции": {
-        "0": {
-            "status": "solved",
-            "difficulty": "easy"
-        }
-    },
-    "mathematics/probability/[17] 25-12-02 (5.2) Метод индикаторов": {
-        "0": {
-            "status": "solved",
-            "difficulty": "easy"
-        },
-        "1": {
-            "status": "solved",
-            "difficulty": "good"
-        },
-        "2": {
-            "status": "failed"
-        }
-    },
-    "mathematics/probability/[14] 25-11-24 (6.3) Условная вероятность": {
-        "0": {
-            "status": "solved",
-            "difficulty": "easy"
-        },
-        "1": {
-            "status": "solved",
-            "difficulty": "easy"
-        },
-        "2": {
-            "status": "solved",
-            "difficulty": "easy"
-        },
-        "3": {
-            "status": "solved",
-            "difficulty": "good"
-        },
-        "4": {
-            "status": "solved",
-            "difficulty": "easy"
-        },
-        "5": {
-            "status": "failed"
-        }
-    },
-    "mathematics/probability/[14] 25-11-24 (6.4) Геометрическая вероятность": {
-        "0": {
-            "status": "solved",
-            "difficulty": "hard"
-        },
-        "1": {
-            "status": "solved",
-            "difficulty": "good"
-        }
-    },
-    "mathematics/probability/[14] 25-11-24 (6.1) Классика": {
-        "0": {
-            "status": "solved",
-            "difficulty": "easy"
-        },
-        "1": {
-            "status": "solved",
-            "difficulty": "easy"
-        }
-    },
-    "mathematics/probability/[07] 25-10-28 (2) Рекурренты в комбинаторике 101": {
-        "0": {
-            "status": "solved",
-            "difficulty": "easy"
-        },
-        "1": {
-            "status": "solved",
-            "difficulty": "good"
-        }
-    },
-    "mathematics/probability/[17] 25-12-02 (5.1) Дискретные случайные величины": {
-        "0": {
-            "status": "solved",
-            "difficulty": "good"
-        },
-        "1": {
-            "status": "buried"
-        }
-    },
-    "mathematics/probability/[01] 25-10-03 (2) Правило суммы и произведения 101": {
-        "0": {
-            "status": "failed"
-        },
-        "1": {
-            "status": "solved",
-            "difficulty": "good"
-        },
-        "2": {
-            "status": "solved",
-            "difficulty": "good"
-        }
-    },
-    "mathematics/probability/[20] 25-12-08 (5.1) Непрерывное распределение": {
-        "0": {
-            "status": "solved",
-            "difficulty": "good"
-        },
-        "1": {
-            "status": "buried"
-        },
-        "2": {
-            "status": "buried"
-        }
-    },
-    "mathematics/probability/[04] 25-10-21 (5) Комбинаторика и теория чисел 101": {
-        "0": {
-            "status": "solved",
-            "difficulty": "easy"
-        }
-    },
-    "mathematics/probability/[14] 25-11-24 (6.2) Арифметика событий": {
-        "0": {
-            "status": "failed"
-        },
-        "1": {
-            "status": "solved",
-            "difficulty": "good"
-        },
-        "2": {
-            "status": "solved",
-            "difficulty": "easy"
-        }
-    },
-    "mathematics/probability/[05] 25-10-21 (8) Комбинаторика и теория чисел 102": {
-        "0": {
-            "status": "solved",
-            "difficulty": "good"
-        },
-        "1": {
-            "status": "solved",
-            "difficulty": "easy"
-        },
-        "2": {
-            "status": "solved",
-            "difficulty": "easy"
-        }
-    },
-    "mathematics/probability/[17] 25-12-02/[02] Метод индикаторов/junior/14 Четыре кости матожидание дисперсия": {
-        "0": {
-            "status": "solved",
-            "difficulty": "easy"
-        }
-    },
-    "mathematics/probability/[14] 25-11-24/[03] Условная вероятность/middle/48 Две урны белый последовательный": {
-        "0": {
-            "status": "solved",
-            "difficulty": "easy"
-        }
-    },
-    "mathematics/probability/[17] 25-12-02/[01] Дискретные случайные величины/middle/4 Игрок рубли раунды матожидание": {
-        "0": {
-            "status": "solved",
-            "difficulty": "easy"
-        }
-    },
-    "mathematics/probability/[20] 25-12-08/[03] Многомерное распредление/middle/37 Треугольник из трёх отрезков": {
-        "0": {
-            "status": "solved",
-            "difficulty": "easy"
-        }
-    },
-    "mathematics/probability/[17] 25-12-02/[01] Дискретные случайные величины/middle/9 Равномерное убывание номер матожидание": {
-        "0": {
-            "status": "solved",
-            "difficulty": "good"
-        }
-    },
-    "mathematics/probability/[14] 25-11-24/[02] Арифметика событий/middle/18 Монета орлы подряд рекуррентность": {
-        "0": {
-            "status": "solved",
-            "difficulty": "easy"
-        }
-    },
-    "mathematics/probability/[26] 25-12-24 Условное распределение 102/[02] Дискретное условное математическое ожидание/senior/14 Дерево ветки груши матожидание": {
-        "0": {
-            "status": "solved",
-            "difficulty": "good"
-        }
-    },
-    "mathematics/probability/[14] 25-11-24/[04] Геометрическая вероятность/senior/70 Саньцзегунь палки пересечение крайние": {
-        "0": {
-            "status": "solved",
-            "difficulty": "easy"
-        }
-    },
-    "mathematics/analysis/[21] 25-12-08 (7) Дифференцируемые функции 102/[03] Произовдная/middle/32 Экстремумы функции": {
-        "0": {
-            "status": "solved",
-            "difficulty": "easy"
-        }
-    },
-    "mathematics/probability/[03] 25-10-21 (2) Правило суммы и произведения 102": {
-        "0": {
-            "status": "failed"
-        }
-    },
-    "mathematics/probability/[17] 25-12-02/[02] Метод индикаторов/senior/25 Девицы театр вставания матожидание": {
-        "0": {
-            "status": "solved",
-            "difficulty": "good"
-        }
-    },
-    "mathematics/analysis/[21] 25-12-08 (7) Дифференцируемые функции 102/[04] Монотонность/middle/44 Монотонность и уравнения": {
-        "0": {
-            "status": "solved",
-            "difficulty": "easy"
-        }
-    },
-    "algorithms/dfs": {
-        "0": {
-            "status": "solved",
-            "difficulty": "easy"
-        }
-    },
-    "mathematics/probability/[14] 25-11-24/[03] Условная вероятность/middle/51 Стрелки два выстрела успех": {
-        "0": {
-            "status": "solved",
-            "difficulty": "easy"
-        }
-    },
-    "mathematics/probability/[14] 25-11-24/[04] Геометрическая вероятность/senior/73 Монета ребро толщина треть": {
-        "0": {
-            "status": "solved",
-            "difficulty": "good"
-        }
-    },
-    "mathematics/probability/[14] 25-11-24/[03] Условная вероятность/middle/49 Ноутбуки продавцы брак совместный": {
-        "0": {
-            "status": "solved",
-            "difficulty": "easy"
-        }
-    },
-    "mathematics/analysis/[21] 25-12-08 (7) Дифференцируемые функции 102/[01] Непреррывность/senior/10 Кратность значений непрерывной функции": {
-        "0": {
-            "status": "solved",
-            "difficulty": "easy"
-        }
-    },
-    "mathematics/analysis/[21] 25-12-08 (7) Дифференцируемые функции 102/[03] Произовдная/middle/25 Оценка производной через вторую производную": {
-        "0": {
-            "status": "solved",
-            "difficulty": "easy"
-        }
-    },
-    "mathematics/analysis/[13] 25-11-24 (6) Пределы и последовательности/[02] Ряды/middle/17 Знакочередующийся ряд": {
-        "0": {
-            "status": "solved",
-            "difficulty": "easy"
-        }
-    },
-    "mathematics/analysis/[08] 25-10-27 (7) Числовые ряды 101/06 Признак Лейбница": {
-        "0": {
-            "status": "solved",
-            "difficulty": "easy"
-        }
-    },
-    "algorithms/trees": {
-        "0": {
-            "status": "solved",
-            "difficulty": "easy"
-        }
-    },
-    "algorithms/bfs": {
-        "0": {
-            "status": "solved",
-            "difficulty": "easy"
-        }
-    },
-    "yandex/intervals/middle/01 Merge Intervals": {
-        "0": {
-            "status": "solved",
-            "difficulty": "easy"
-        }
-    },
-    "yandex/hash_map_set/junior/05 Single Number": {
-        "0": {
-            "status": "solved",
-            "difficulty": "easy"
-        }
-    },
-    "yandex/linked_list/middle/04 Swap Nodes in Pairs": {
-        "0": {
-            "status": "solved",
-            "difficulty": "easy"
-        }
-    },
-    "courses/mathematics/probability/[17] 25-12-02/[02] Метод индикаторов/senior/25 Девицы театр вставания матожидание": {
-        "0": {
-            "status": "solved",
-            "difficulty": "good"
-        }
-    },
-    "courses/mathematics/analysis/[21] 25-12-08 (7) Дифференцируемые функции 102/[04] Монотонность/middle/44 Монотонность и уравнения": {
-        "0": {
-            "status": "solved",
-            "difficulty": "easy"
-        }
-    },
-    "courses/mathematics/probability/[14] 25-11-24/[03] Условная вероятность/middle/51 Стрелки два выстрела успех": {
-        "0": {
-            "status": "solved",
-            "difficulty": "easy"
-        }
-    },
-    "courses/mathematics/probability/[14] 25-11-24/[04] Геометрическая вероятность/senior/73 Монета ребро толщина треть": {
-        "0": {
-            "status": "solved",
-            "difficulty": "good"
-        }
-    },
-    "courses/mathematics/probability/[14] 25-11-24/[03] Условная вероятность/middle/49 Ноутбуки продавцы брак совместный": {
-        "0": {
-            "status": "solved",
-            "difficulty": "easy"
-        }
-    },
-    "courses/mathematics/analysis/[21] 25-12-08 (7) Дифференцируемые функции 102/[01] Непреррывность/senior/10 Кратность значений непрерывной функции": {
-        "0": {
-            "status": "solved",
-            "difficulty": "easy"
-        }
-    },
-    "courses/mathematics/analysis/[21] 25-12-08 (7) Дифференцируемые функции 102/[03] Произовдная/middle/25 Оценка производной через вторую производную": {
-        "0": {
-            "status": "solved",
-            "difficulty": "easy"
-        }
-    },
-    "courses/mathematics/analysis/[13] 25-11-24 (6) Пределы и последовательности/[02] Ряды/middle/17 Знакочередующийся ряд": {
-        "0": {
-            "status": "solved",
-            "difficulty": "easy"
-        }
-    },
-    "courses/mathematics/analysis/[08] 25-10-27 (7) Числовые ряды 101/06 Признак Лейбница": {
-        "0": {
-            "status": "solved",
-            "difficulty": "easy"
-        }
-    },
-    "mathematics/probability/[10] 25-11-04 (4) Теория вероятностей 101": {
-        "0": {
-            "status": "failed"
-        },
-        "1": {
-            "status": "failed"
-        },
-        "2": {
-            "status": "buried"
-        }
-    },
-    "mathematics/analysis/[21] 25-12-08 (7) Дифференцируемые функции 102/[01] Непреррывность/middle/04 Теорема Коши о промежуточном значении": {
-        "0": {
-            "status": "failed"
-        }
-    },
-    "mathematics/analysis/[13] 25-11-24 (6) Пределы и последовательности/[02] Ряды/middle/19 Бесконечные произведения (тригонометрические)": {
-        "0": {
-            "status": "failed"
-        }
-    },
-    "mathematics/probability/[17] 25-12-02/[01] Дискретные случайные величины/senior/12 Рулетка сумма среднее число": {
-        "0": {
-            "status": "failed"
-        }
-    },
-    "mathematics/probability/[20] 25-12-08/[03] Многомерное распредление/middle/28 Ковариация максимум отрезок": {
-        "0": {
-            "status": "failed"
-        }
-    },
-    "mathematics/analysis/[21] 25-12-08 (7) Дифференцируемые функции 102/[03] Произовдная/middle/27 Максимальное a для системы": {
-        "0": {
-            "status": "failed"
-        }
-    },
-    "mathematics/probability/[14] 25-11-24/[02] Арифметика событий/middle/25 Автомобиль интервал вероятность шоссе": {
-        "0": {
-            "status": "failed"
-        }
-    },
-    "mathematics/probability/[26] 25-12-24 Условное распределение 102/[03] Непрерывное условное математическое ожидание/senior/27 Параллелограмм две точки расстояние": {
-        "0": {
-            "status": "failed"
-        }
-    },
-    "mathematics/probability/[14] 25-11-24/[02] Арифметика событий/middle/14 Кубик треугольник три числа": {
-        "0": {
-            "status": "failed"
-        }
-    },
-    "courses/mathematics/probability/[10] 25-11-04 (4) Теория вероятностей 101": {
-        "0": {
-            "status": "failed"
-        },
-        "1": {
-            "status": "failed"
-        },
-        "2": {
-            "status": "buried"
-        }
-    },
-    "courses/mathematics/analysis/[21] 25-12-08 (7) Дифференцируемые функции 102/[01] Непреррывность/middle/04 Теорема Коши о промежуточном значении": {
-        "0": {
-            "status": "failed"
-        }
-    },
-    "courses/mathematics/analysis/[13] 25-11-24 (6) Пределы и последовательности/[02] Ряды/middle/19 Бесконечные произведения (тригонометрические)": {
-        "0": {
-            "status": "failed"
-        }
-    },
-    "courses/mathematics/probability/[17] 25-12-02/[01] Дискретные случайные величины/senior/12 Рулетка сумма среднее число": {
-        "0": {
-            "status": "failed"
-        }
-    },
-    "courses/mathematics/probability/[20] 25-12-08/[03] Многомерное распредление/middle/28 Ковариация максимум отрезок": {
-        "0": {
-            "status": "failed"
-        }
-    },
-    "courses/mathematics/analysis/[21] 25-12-08 (7) Дифференцируемые функции 102/[03] Произовдная/middle/27 Максимальное a для системы": {
-        "0": {
-            "status": "failed"
-        }
-    },
-    "courses/mathematics/probability/[14] 25-11-24/[02] Арифметика событий/middle/25 Автомобиль интервал вероятность шоссе": {
-        "0": {
-            "status": "failed"
-        }
-    },
-    "courses/mathematics/probability/[26] 25-12-24 Условное распределение 102/[03] Непрерывное условное математическое ожидание/senior/27 Параллелограмм две точки расстояние": {
-        "0": {
-            "status": "failed"
-        }
-    },
-    "courses/mathematics/probability/[03] 25-10-21 (2) Правило суммы и произведения 102": {
-        "0": {
-            "status": "failed"
-        }
-    },
-    "courses/mathematics/probability/[14] 25-11-24/[02] Арифметика событий/middle/14 Кубик треугольник три числа": {
-        "0": {
-            "status": "failed"
-        }
-    },
-    "mathematics/probability/[20] 25-12-08/[01] Непрерывное распределение/junior/3 Непрерывная функция дискретное распределение": {
-        "0": {
-            "status": "buried"
-        }
-    },
-    "mathematics/probability/[26] 25-12-24 Условное распределение 102/[02] Дискретное условное математическое ожидание/middle/11 Составное распределение матожидание Вальд": {
-        "0": {
-            "status": "buried"
-        }
-    },
-    "mathematics/analysis/[13] 25-11-24 (6) Пределы и последовательности/[01] Последовательности/middle/06 График предела функции": {
-        "0": {
-            "status": "buried"
-        }
-    },
-    "mathematics/analysis/[21] 25-12-08 (7) Дифференцируемые функции 102/[01] Непреррывность/middle/09 Наименьший период непрерывной функции": {
-        "0": {
-            "status": "buried"
-        }
-    },
-    "mathematics/analysis/[21] 25-12-08 (7) Дифференцируемые функции 102/[03] Произовдная/middle/30 Уравнение f'f=x": {
-        "0": {
-            "status": "buried"
-        }
-    },
-    "mathematics/analysis/[21] 25-12-08 (7) Дифференцируемые функции 102/[03] Произовдная/middle/26 Теорема Ролля для f через x": {
-        "0": {
-            "status": "buried"
-        }
-    },
-    "mathematics/probability/[26] 25-12-24 Условное распределение 102/[03] Непрерывное условное математическое ожидание/senior/26 Нормальный вектор функция минимизация": {
-        "0": {
-            "status": "buried"
-        }
-    },
-    "mathematics/analysis/[13] 25-11-24 (6) Пределы и последовательности/[04] Предел функции/middle/32 Функция с заданным множеством непрерывности": {
-        "0": {
-            "status": "buried"
-        }
-    },
-    "mathematics/probability/[14] 25-11-24/[02] Арифметика событий/senior/26 Многогранники кости симуляция": {
-        "0": {
-            "status": "buried"
-        }
-    },
-    "mathematics/probability/[17] 25-12-02/[01] Дискретные случайные величины/senior/11 Геометрическое распределение свойство памяти": {
-        "0": {
-            "status": "buried"
-        }
-    },
-    "mathematics/analysis/[21] 25-12-08 (7) Дифференцируемые функции 102/[01] Непреррывность/middle/08 Нечётная непрерывная функция": {
-        "0": {
-            "status": "buried"
-        }
-    },
-    "mathematics/analysis/[13] 25-11-24 (6) Пределы и последовательности/[03] Подпоследовательности/middle/29 Множество частичных пределов": {
-        "0": {
-            "status": "buried"
-        }
-    },
-    "mathematics/probability/[20] 25-12-08/[03] Многомерное распредление/middle/41 Равномерные вектор двойное пи": {
-        "0": {
-            "status": "buried"
-        }
-    },
-    "mathematics/probability/[20] 25-12-08/[02] Математическое ожидание/middle/16 Корреляция единица линейная функция": {
-        "0": {
-            "status": "buried"
-        }
-    },
-    "courses/mathematics/probability/[20] 25-12-08/[01] Непрерывное распределение/junior/3 Непрерывная функция дискретное распределение": {
-        "0": {
-            "status": "buried"
-        }
-    },
-    "courses/mathematics/probability/[26] 25-12-24 Условное распределение 102/[02] Дискретное условное математическое ожидание/middle/11 Составное распределение матожидание Вальд": {
-        "0": {
-            "status": "buried"
-        }
-    },
-    "courses/mathematics/analysis/[13] 25-11-24 (6) Пределы и последовательности/[01] Последовательности/middle/06 График предела функции": {
-        "0": {
-            "status": "buried"
-        }
-    },
-    "courses/mathematics/analysis/[21] 25-12-08 (7) Дифференцируемые функции 102/[01] Непреррывность/middle/09 Наименьший период непрерывной функции": {
-        "0": {
-            "status": "buried"
-        }
-    },
-    "courses/mathematics/analysis/[21] 25-12-08 (7) Дифференцируемые функции 102/[03] Произовдная/middle/30 Уравнение f'f=x": {
-        "0": {
-            "status": "buried"
-        }
-    },
-    "courses/mathematics/analysis/[21] 25-12-08 (7) Дифференцируемые функции 102/[03] Произовдная/middle/26 Теорема Ролля для f через x": {
-        "0": {
-            "status": "buried"
-        }
-    },
-    "courses/mathematics/probability/[26] 25-12-24 Условное распределение 102/[03] Непрерывное условное математическое ожидание/senior/26 Нормальный вектор функция минимизация": {
-        "0": {
-            "status": "buried"
-        }
-    },
-    "courses/mathematics/analysis/[13] 25-11-24 (6) Пределы и последовательности/[04] Предел функции/middle/32 Функция с заданным множеством непрерывности": {
-        "0": {
-            "status": "buried"
-        }
-    },
-    "courses/mathematics/probability/[14] 25-11-24/[02] Арифметика событий/senior/26 Многогранники кости симуляция": {
-        "0": {
-            "status": "buried"
-        }
-    },
-    "courses/mathematics/probability/[17] 25-12-02/[01] Дискретные случайные величины/senior/11 Геометрическое распределение свойство памяти": {
-        "0": {
-            "status": "buried"
-        }
-    },
-    "courses/mathematics/analysis/[21] 25-12-08 (7) Дифференцируемые функции 102/[01] Непреррывность/middle/08 Нечётная непрерывная функция": {
-        "0": {
-            "status": "buried"
-        }
-    },
-    "courses/mathematics/analysis/[13] 25-11-24 (6) Пределы и последовательности/[03] Подпоследовательности/middle/29 Множество частичных пределов": {
-        "0": {
-            "status": "buried"
-        }
-    },
-    "courses/mathematics/probability/[20] 25-12-08/[03] Многомерное распредление/middle/41 Равномерные вектор двойное пи": {
-        "0": {
-            "status": "buried"
-        }
-    },
-    "courses/mathematics/probability/[20] 25-12-08/[02] Математическое ожидание/middle/16 Корреляция единица линейная функция": {
-        "0": {
-            "status": "buried"
-        }
+  "courses/mathematics/probability/[07] 25-10-28 (2) Рекурренты в комбинаторике 101": {
+    "0": {
+      "status": "solved",
+      "difficulty": "good"
+    },
+    "1": {
+      "status": "solved",
+      "difficulty": "good"
+    },
+    "2": {
+      "status": "buried"
     }
+  },
+  "courses/mathematics/probability/[01] 25-10-03 (2) Правило суммы и произведения 101": {
+    "0": {
+      "status": "solved",
+      "difficulty": "easy"
+    },
+    "1": {
+      "status": "solved",
+      "difficulty": "good"
+    },
+    "2": {
+      "status": "solved",
+      "difficulty": "good"
+    }
+  },
+  "courses/mathematics/probability/[04] 25-10-21 (5) Комбинаторика и теория чисел 101": {
+    "0": {
+      "status": "solved",
+      "difficulty": "good"
+    }
+  },
+  "courses/mathematics/probability/[05] 25-10-21 (8) Комбинаторика и теория чисел 102": {
+    "0": {
+      "status": "solved",
+      "difficulty": "good"
+    },
+    "1": {
+      "status": "solved",
+      "difficulty": "good"
+    },
+    "2": {
+      "status": "solved",
+      "difficulty": "good"
+    }
+  },
+  "courses/mathematics/probability/[17] 25-12-02/[02] Метод индикаторов/junior/14 Четыре кости матожидание дисперсия": {
+    "0": {
+      "status": "solved",
+      "difficulty": "good"
+    }
+  },
+  "courses/mathematics/probability/[14] 25-11-24/[03] Условная вероятность/middle/48 Две урны белый последовательный": {
+    "0": {
+      "status": "solved",
+      "difficulty": "good"
+    }
+  },
+  "courses/algorithms/two_pointers": {
+    "0": {
+      "status": "solved",
+      "difficulty": "good"
+    }
+  },
+  "courses/mathematics/probability/[17] 25-12-02/[01] Дискретные случайные величины/middle/4 Игрок рубли раунды матожидание": {
+    "0": {
+      "status": "solved",
+      "difficulty": "good"
+    }
+  },
+  "courses/mathematics/probability/[20] 25-12-08/[03] Многомерное распредление/middle/37 Треугольник из трёх отрезков": {
+    "0": {
+      "status": "solved",
+      "difficulty": "good"
+    }
+  },
+  "courses/mathematics/probability/[17] 25-12-02/[01] Дискретные случайные величины/middle/9 Равномерное убывание номер матожидание": {
+    "0": {
+      "status": "solved",
+      "difficulty": "good"
+    }
+  },
+  "courses/mathematics/probability/[14] 25-11-24/[02] Арифметика событий/middle/18 Монета орлы подряд рекуррентность": {
+    "0": {
+      "status": "solved",
+      "difficulty": "good"
+    }
+  },
+  "courses/mathematics/probability/[26] 25-12-24 Условное распределение 102/[02] Дискретное условное математическое ожидание/senior/14 Дерево ветки груши матожидание": {
+    "0": {
+      "status": "solved",
+      "difficulty": "good"
+    }
+  },
+  "courses/mathematics/probability/[14] 25-11-24/[04] Геометрическая вероятность/senior/70 Саньцзегунь палки пересечение крайние": {
+    "0": {
+      "status": "solved",
+      "difficulty": "good"
+    }
+  },
+  "courses/mathematics/analysis/[21] 25-12-08 (7) Дифференцируемые функции 102/[03] Произовдная/middle/32 Экстремумы функции": {
+    "0": {
+      "status": "solved",
+      "difficulty": "good"
+    }
+  },
+  "courses/mathematics/algebra/[15] 25-12-03 (5) Линейные операторы 102/[02] Определители/middle/20 Идемпотент определитель E минус A": {
+    "0": {
+      "status": "solved",
+      "difficulty": "easy"
+    }
+  },
+  "courses/mathematics/algebra/[11] 25-11-04 (5) Векторные пространства 102/[03] Матрицы/middle/42 Матричное уравнение единственное решение": {
+    "0": {
+      "status": "solved",
+      "difficulty": "easy"
+    }
+  },
+  "courses/mathematics/algebra/[18] 25-12-08 (5) Жорданова нормальная форма 102/[02] Жорданова Нормальная Форма/middle/19 Неотрицательная матрица собственные степени": {
+    "0": {
+      "status": "solved",
+      "difficulty": "easy"
+    }
+  },
+  "courses/mathematics/algebra/[11] 25-11-04 (5) Векторные пространства 102/[02] Ранг матрицы/middle/19 Ранг матрицы n на n": {
+    "0": {
+      "status": "solved",
+      "difficulty": "good"
+    }
+  },
+  "courses/mathematics/algebra/[11] 25-11-04 (5) Векторные пространства 102/[04] Ортогональность и скалярное проивздение/middle/52 Расстояние матриц кососимметричные": {
+    "0": {
+      "status": "solved",
+      "difficulty": "good"
+    }
+  },
+  "courses/mathematics/algebra/[18] 25-12-08 (5) Жорданова нормальная форма 102/[01] Собственные числа/middle/06 Матрицы AB ноль собственные E плюс BA": {
+    "0": {
+      "status": "solved",
+      "difficulty": "good"
+    }
+  },
+  "courses/mathematics/algebra/[15] 25-12-03 (5) Линейные операторы 102/[02] Определители/middle/17 Определитель матрицы знаки": {
+    "0": {
+      "status": "solved",
+      "difficulty": "easy"
+    }
+  },
+  "courses/mathematics/probability/[03] 25-10-21 (2) Правило суммы и произведения 102": {
+    "0": {
+      "status": "failed"
+    }
+  },
+  "courses/mathematics/analysis/[21] 25-12-08 (7) Дифференцируемые функции 102/[01] Непреррывность/middle/04 Теорема Коши о промежуточном значении": {
+    "0": {
+      "status": "failed"
+    }
+  },
+  "courses/mathematics/analysis/[13] 25-11-24 (6) Пределы и последовательности/[02] Ряды/middle/19 Бесконечные произведения (тригонометрические)": {
+    "0": {
+      "status": "failed"
+    }
+  },
+  "courses/mathematics/probability/[17] 25-12-02/[01] Дискретные случайные величины/senior/12 Рулетка сумма среднее число": {
+    "0": {
+      "status": "failed"
+    }
+  },
+  "courses/mathematics/probability/[20] 25-12-08/[03] Многомерное распредление/middle/28 Ковариация максимум отрезок": {
+    "0": {
+      "status": "failed"
+    }
+  },
+  "courses/mathematics/analysis/[21] 25-12-08 (7) Дифференцируемые функции 102/[03] Произовдная/middle/27 Максимальное a для системы": {
+    "0": {
+      "status": "failed"
+    }
+  },
+  "courses/mathematics/probability/[14] 25-11-24/[02] Арифметика событий/middle/25 Автомобиль интервал вероятность шоссе": {
+    "0": {
+      "status": "failed"
+    }
+  },
+  "courses/mathematics/probability/[26] 25-12-24 Условное распределение 102/[03] Непрерывное условное математическое ожидание/senior/27 Параллелограмм две точки расстояние": {
+    "0": {
+      "status": "failed"
+    }
+  },
+  "courses/mathematics/probability/[14] 25-11-24/[02] Арифметика событий/middle/14 Кубик треугольник три числа": {
+    "0": {
+      "status": "failed"
+    }
+  },
+  "courses/mathematics/algebra/[18] 25-12-08 (5) Жорданова нормальная форма 102/[01] Собственные числа/middle/05 Собственные значения оператора Phi": {
+    "0": {
+      "status": "failed"
+    }
+  },
+  "courses/mathematics/algebra/[11] 25-11-04 (5) Векторные пространства 102/[02] Ранг матрицы/middle/23 Ранг подматрицы невырожденной": {
+    "0": {
+      "status": "failed"
+    }
+  },
+  "courses/mathematics/algebra/[24] 25-12-15 (5) Квадратичные формы 102/[02] Симметрические операторы/middle/08 Симметричная матрица вектор y равно Ax": {
+    "0": {
+      "status": "failed"
+    }
+  },
+  "courses/mathematics/algebra/[24] 25-12-15 (5) Квадратичные формы 102/[04] Знак формы/middle/27 Квадратичная форма XtAX положительно определена": {
+    "0": {
+      "status": "failed"
+    }
+  },
+  "courses/mathematics/algebra/[24] 25-12-15 (5) Квадратичные формы 102/[04] Знак формы/middle/26 Порядок неотрицательных матриц следы квадратов": {
+    "0": {
+      "status": "failed"
+    }
+  },
+  "courses/mathematics/probability/[26] 25-12-24 Условное распределение 102/[02] Дискретное условное математическое ожидание/middle/10 Аня задачи неправильные ответы": {
+    "0": {
+      "status": "failed"
+    }
+  },
+  "courses/mathematics/algebra/[24] 25-12-15 (5) Квадратичные формы 102/[02] Симметрические операторы/middle/09 Билинейная функция идемпотент размерности": {
+    "0": {
+      "status": "failed"
+    }
+  },
+  "courses/mathematics/probability/[20] 25-12-08/[01] Непрерывное распределение/junior/3 Непрерывная функция дискретное распределение": {
+    "0": {
+      "status": "buried"
+    }
+  },
+  "courses/mathematics/probability/[26] 25-12-24 Условное распределение 102/[02] Дискретное условное математическое ожидание/middle/11 Составное распределение матожидание Вальд": {
+    "0": {
+      "status": "buried"
+    }
+  },
+  "courses/mathematics/analysis/[13] 25-11-24 (6) Пределы и последовательности/[01] Последовательности/middle/06 График предела функции": {
+    "0": {
+      "status": "buried"
+    }
+  },
+  "courses/mathematics/analysis/[21] 25-12-08 (7) Дифференцируемые функции 102/[01] Непреррывность/middle/09 Наименьший период непрерывной функции": {
+    "0": {
+      "status": "buried"
+    }
+  },
+  "courses/mathematics/analysis/[21] 25-12-08 (7) Дифференцируемые функции 102/[03] Произовдная/middle/30 Уравнение f'f=x": {
+    "0": {
+      "status": "buried"
+    }
+  },
+  "courses/mathematics/analysis/[21] 25-12-08 (7) Дифференцируемые функции 102/[03] Произовдная/middle/26 Теорема Ролля для f через x": {
+    "0": {
+      "status": "buried"
+    }
+  },
+  "courses/mathematics/probability/[26] 25-12-24 Условное распределение 102/[03] Непрерывное условное математическое ожидание/senior/26 Нормальный вектор функция минимизация": {
+    "0": {
+      "status": "buried"
+    }
+  },
+  "courses/mathematics/analysis/[13] 25-11-24 (6) Пределы и последовательности/[04] Предел функции/middle/32 Функция с заданным множеством непрерывности": {
+    "0": {
+      "status": "buried"
+    }
+  },
+  "courses/mathematics/probability/[14] 25-11-24/[02] Арифметика событий/senior/26 Многогранники кости симуляция": {
+    "0": {
+      "status": "buried"
+    }
+  },
+  "courses/mathematics/probability/[17] 25-12-02/[01] Дискретные случайные величины/senior/11 Геометрическое распределение свойство памяти": {
+    "0": {
+      "status": "buried"
+    }
+  },
+  "courses/mathematics/analysis/[21] 25-12-08 (7) Дифференцируемые функции 102/[01] Непреррывность/middle/08 Нечётная непрерывная функция": {
+    "0": {
+      "status": "buried"
+    }
+  },
+  "courses/mathematics/analysis/[13] 25-11-24 (6) Пределы и последовательности/[03] Подпоследовательности/middle/29 Множество частичных пределов": {
+    "0": {
+      "status": "buried"
+    }
+  },
+  "courses/mathematics/probability/[20] 25-12-08/[03] Многомерное распредление/middle/41 Равномерные вектор двойное пи": {
+    "0": {
+      "status": "buried"
+    }
+  },
+  "courses/mathematics/probability/[20] 25-12-08/[02] Математическое ожидание/middle/16 Корреляция единица линейная функция": {
+    "0": {
+      "status": "buried"
+    }
+  }
 }

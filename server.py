@@ -102,6 +102,6 @@ class Handler(BaseHTTPRequestHandler):
 
 
 if __name__ == '__main__':
-    server = HTTPServer(('localhost', 8080), Handler)
-    print('http://localhost:8080')
+    server = HTTPServer(('localhost', 3481), Handler)
+    print('http://localhost:3481')
     server.serve_forever()
